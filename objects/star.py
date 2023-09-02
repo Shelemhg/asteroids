@@ -2,7 +2,16 @@
 
 import random, math
 from objects.flying_object import FlyingObject
-from constants import BASE_COLOR, COLOR_VARIATION, STAR_MIN_SIZE, STAR_MAX_SIZE, STARS_1_MIN_SIZE, STARS_2_MAX_SIZE, STARS_2_MIN_SIZE, STARS_2_MAX_SIZE
+from constants import (
+    BASE_COLOR,
+    COLOR_VARIATION,
+    STAR_MIN_SIZE,
+    STAR_MAX_SIZE,
+    STARS_1_MIN_SIZE,
+    STARS_2_MAX_SIZE,
+    STARS_2_MIN_SIZE,
+    STARS_2_MAX_SIZE,
+)
 
 # Define a Star class
 class Star(FlyingObject):

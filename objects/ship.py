@@ -9,18 +9,19 @@ from constants import SHIP_TEXTURE, SHIP_WIDTH, SHIP_LENGTH, SCREEN_WIDTH, SCREE
 class Ship(FlyingObject):
     def __init__(self):
         super().__init__()
-        self.texture = arcade.load_texture(SHIP_TEXTURE)
-        self.width = SHIP_WIDTH
-        self.height = SHIP_LENGTH
         self.angle = -90
-        self.velocity = 0
         self.center.x = SCREEN_WIDTH / 2
         self.center.y = SCREEN_HEIGHT / 2
         self.direction = +90
+        self.dYaw = 0
         self.dx = 0
         self.dy = 0
-        self.dYaw = 0
+        self.height = SHIP_LENGTH
         self.radius = 30
+        self.texture = arcade.load_texture(SHIP_TEXTURE)
+        self.velocity = 0
+        self.width = SHIP_WIDTH
+
 
     def advance(self, delta_time):
         self.center.x += self.dx

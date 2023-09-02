@@ -25,7 +25,15 @@ class FlyingObject:
 
     def draw(self):
 
-        arcade.draw_texture_rectangle(self.center.x, self.center.y, self.width, self.height, self.texture, self.angle + 90, self.alpha)
+        arcade.draw_texture_rectangle(
+            self.center.x,
+            self.center.y,
+            self.width,
+            self.height,
+            self.texture,
+            self.angle + 90,
+            self.alpha
+        )
 
 
     def is_off_screen(self, SCREEN_WIDTH, SCREEN_HEIGHT):
