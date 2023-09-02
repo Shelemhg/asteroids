@@ -1,8 +1,10 @@
 # game/game.py
 
 import arcade
-import random
 import math
+import random
+
+
 from objects.asteroid import Asteroid
 from objects.bullet import Bullet
 from objects.ship import Ship
@@ -35,13 +37,20 @@ class AsteroidsGame(arcade.Window):
         arcade.set_background_color(arcade.color.SMOKY_BLACK)
 
         self.held_keys = set()
-        self.timer = 0
         self.ship = Ship()
         self.bullets = []
         self.asteroids = []
 
-        self.dx = 0
-        self.dy = 0
+        # Initialize Stars
+        self.background_stars = []
+        self.stars_1 = []
+        self.stars_2 = []
+
+         # Generate stars for each layer
+        self.generate_stars(self.background_stars, NUMBER_OF_BACKGROUND_STARS, "")
+        self.generate_stars(self.stars_1, NUMBER_OF_STARS_1, "1")
+        self.generate_stars(self.stars_2, NUMBER_OF_STARS_2, "2")
+
 
         # Initialize asteroids at the start of the game
         for new_asteroid in range(INITIAL_ROCK_COUNT):
@@ -49,17 +58,6 @@ class AsteroidsGame(arcade.Window):
             y = random.uniform(0, SCREEN_HEIGHT)
             new_asteroid = Asteroid("Big", x, y)
             self.asteroids.append(new_asteroid)
-
-        # Initialize the list of Stars
-        self.background_stars = []
-        self.stars_1 = []
-        self.stars_2 = []
-
-
-        # Generate stars for each layer
-        self.generate_stars(self.background_stars, NUMBER_OF_BACKGROUND_STARS, "")
-        self.generate_stars(self.stars_1, NUMBER_OF_STARS_1, "1")
-        self.generate_stars(self.stars_2, NUMBER_OF_STARS_2, "2")
 
 
     def generate_stars(self, stars_list, num_stars, type):
@@ -141,20 +139,25 @@ class AsteroidsGame(arcade.Window):
                 star.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 
-    def update_star_positions(self, stars_list, ship_velocity, delta_time):
-        for star in stars_list:
-            # Calculate the change in star's position based on its angle and speed
-            dx = math.cos(math.radians(star.angle)) * star.speed * delta_time
-            dy = math.sin(math.radians(star.angle)) * star.speed * delta_time
+            # self.update_star_positions(self.stars_1, self.ship.get_velocity(), delta_time)
+            # self.update_star_positions(self.stars_2, self.ship.get_velocity(), delta_time)
 
-            # Update the star's position
-            star.x += dx - ship_velocity[0]
-            star.y += dy - ship_velocity[1]
 
-            # Wrap stars around the screen
-            if star.x < 0:
-                star.x = SCREEN_WIDTH
-                star.y = random.uniform(0, SCREEN_HEIGHT)
+
+    # def update_star_positions(self, stars_list, ship_velocity, delta_time):
+    #     for star in stars_list:
+    #         # Calculate the change in star's position based on its angle and speed
+    #         dx = math.cos(math.radians(star.angle)) * star.speed * delta_time
+    #         dy = math.sin(math.radians(star.angle)) * star.speed * delta_time
+
+    #         # Update the star's position
+    #         star.x += dx - ship_velocity[0]
+    #         star.y += dy - ship_velocity[1]
+
+    #         # Wrap stars around the screen
+    #         if star.x < 0:
+    #             star.x = SCREEN_WIDTH
+    #             star.y = random.uniform(0, SCREEN_HEIGHT)
       
 
     def check_collisions(self):
