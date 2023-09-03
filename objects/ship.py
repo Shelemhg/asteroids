@@ -11,7 +11,11 @@ from constants import (
     SHIP_LENGTH, 
     SHIP_RADIUS, 
     SCREEN_WIDTH, 
-    SCREEN_HEIGHT
+    SCREEN_HEIGHT,
+    LEFT_LIMIT,
+    RIGHT_LIMIT,
+    BOTTOM_LIMIT,
+    TOP_LIMIT    
 )
 
 class Ship(FlyingObject):
@@ -31,9 +35,10 @@ class Ship(FlyingObject):
     def advance(self):
         # Update position based on velocity
         self.position += self.velocity
+            
         # Update orientation based on angular velocity
         self.texture_orientation += self.angular_velocity
-        
+
 
     def draw(self):
         arcade.draw_texture_rectangle(self.position.x, self.position.y, self.width, self.height, self.texture, self.texture_orientation + 90, self.alpha)

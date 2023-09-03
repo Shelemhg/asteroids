@@ -194,7 +194,11 @@ class AsteroidsGame(arcade.Window):
             ship_dy = math.sin(math.radians(self.ship.texture_orientation))
             # Accelerate!!
             # Increase the ships velocity vector according to its current orientation and Thust
+            
             self.ship.velocity -= pygame.Vector2(ship_dx * SHIP_THRUST_AMOUNT, ship_dy * SHIP_THRUST_AMOUNT)
+            
+            for asteroid in self.asteroids:
+                asteroid.velocity += pygame.Vector2(ship_dx * SHIP_THRUST_AMOUNT, ship_dy * SHIP_THRUST_AMOUNT)
 
             # Update movement of stars
             for star in self.stars:
@@ -215,7 +219,11 @@ class AsteroidsGame(arcade.Window):
             ship_dy = math.sin(math.radians(self.ship.texture_orientation))
             # Reverse!
             # Increase the ships velocity vector according to its current orientation and Thust
+            
             self.ship.velocity += pygame.Vector2(ship_dx * SHIP_RETRO_THRUST_AMOUNT, ship_dy * SHIP_RETRO_THRUST_AMOUNT)
+            
+            for asteroid in self.asteroids:
+                asteroid.velocity -= pygame.Vector2(ship_dx * SHIP_RETRO_THRUST_AMOUNT, ship_dy * SHIP_RETRO_THRUST_AMOUNT)
 
             # Update movement of stars
             for star in self.stars:
@@ -271,6 +279,8 @@ class AsteroidsGame(arcade.Window):
             self.ship = Ship()
             self.bullets = []
             self.asteroids = []
+            for star in self.stars:
+                star.velocity = pygame.Vector2(0,0)
 
             for new_asteroid in range(INITIAL_ROCK_COUNT):
 
