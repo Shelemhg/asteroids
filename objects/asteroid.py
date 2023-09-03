@@ -33,7 +33,7 @@ class Asteroid(FlyingObject):
         self.size = size
         
         self.position.x = x
-        self.position.y = y        
+        self.position.y = y
         
         # self.texture_orientation = random.randint(0, 360)
         self.texture_orientation = angle
@@ -64,16 +64,16 @@ class Asteroid(FlyingObject):
 
         if size == "Big":
             
-            if (x > SCREEN_WIDTH / 2 - SCREEN_WIDTH / 4 and x < SCREEN_WIDTH / 2 + SCREEN_WIDTH / 4) and (
-                    y > SCREEN_HEIGHT / 2 - SCREEN_WIDTH / 4 and y < SCREEN_HEIGHT / 2 + SCREEN_WIDTH / 4):
-                if x > SCREEN_WIDTH / 2:
-                    x += SCREEN_WIDTH / 4
+            if (self.position.x > SCREEN_WIDTH / 2 - SCREEN_WIDTH / 4 and self.position.x < SCREEN_WIDTH / 2 + SCREEN_WIDTH / 4) and (
+                    self.position.y > SCREEN_HEIGHT / 2 - SCREEN_WIDTH / 4 and self.position.y < SCREEN_HEIGHT / 2 + SCREEN_WIDTH / 4):
+                if self.position.x > SCREEN_WIDTH / 2:
+                    self.position.x += SCREEN_WIDTH / 4
                 else:
-                    x -= SCREEN_WIDTH / 4
-                if y > SCREEN_HEIGHT / 2:
-                    y += SCREEN_HEIGHT / 4
+                    self.position.x -= SCREEN_WIDTH / 4
+                if self.position.y > SCREEN_HEIGHT / 2:
+                    self.position.y += SCREEN_HEIGHT / 4
                 else:
-                    y -= SCREEN_HEIGHT / 4
+                    self.position.y -= SCREEN_HEIGHT / 4
 
 
 
