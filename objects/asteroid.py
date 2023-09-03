@@ -62,9 +62,9 @@ class Asteroid(FlyingObject):
 
         self.width = self.texture.width
         self.height = self.texture.height
+        
         # Checks if the asteroid created is big, if so, it means that the game just started, so now it will check if the asteroids are too close to the middle, 
         # which is where the spaceship is located, and if so, they should move further away from the spaceship 
-
         if size == "Big":
             
             if (self.position.x > SCREEN_WIDTH / 2 - SCREEN_WIDTH / 4 and self.position.x < SCREEN_WIDTH / 2 + SCREEN_WIDTH / 4) and (

@@ -125,8 +125,6 @@ class AsteroidsGame(arcade.Window):
                 bullet.advance()
                 bullet.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-            # S T A R S
-            # --------------
             # Update the position of the far_stars
             for star in self.stars:
                 star.advance()
@@ -183,17 +181,13 @@ class AsteroidsGame(arcade.Window):
                 self.asteroids.remove(asteroid)
 
 
-    def check_keys(self, delta_time):
+    def check_keys(self):
 
         """
         Check for key presses and update the ship's behavior accordingly.
         """
         # K E Y     U P
         if arcade.key.UP in self.held_keys:
-
-            # # # # # # # # # 
-            #   S H I P
-            # # # # # # # # # 
             
             # Calculate the size of each component from its current angle
             ship_dx = math.cos(math.radians(self.ship.texture_orientation))
@@ -277,10 +271,6 @@ class AsteroidsGame(arcade.Window):
             self.ship = Ship()
             self.bullets = []
             self.asteroids = []
-
-            # for star in self.stars:
-            #     star.veloci = 0
-            #     star.dy = 0
 
             for new_asteroid in range(INITIAL_ROCK_COUNT):
 
