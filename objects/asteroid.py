@@ -1,9 +1,10 @@
 # objects/asteroid.py
 
 import arcade
-from objects.flying_object import FlyingObject
-import random
 import math
+import random
+
+from objects.flying_object import FlyingObject
 
 from constants import (
     BIG_ROCK_TEXTURE,
@@ -25,7 +26,7 @@ from constants import (
 
 class Asteroid(FlyingObject):
 
-    def __init__(self, size, x, y):
+    def __init__(self, size, x, y, angle):
 
         super().__init__()
         self.size = size
@@ -62,21 +63,21 @@ class Asteroid(FlyingObject):
                 else:
                     y -= SCREEN_HEIGHT / 4
 
-        self.center.x = x
-        self.center.y = y
+        self.position.x = x
+        self.position.y = y
         self.direction = random.uniform(0, 360)
 
         self.width = self.texture.width
         self.height = self.texture.height
-        self.angle = 0
+        self.angle = angle
         self.rotation_direction = random.randint(0, 1)
         self.hit_points = 0
 
 
     def advance(self, delta_time):
 
-        self.center.x += math.cos(math.radians(self.direction)) * self.speed * 30 * delta_time
-        self.center.y += math.sin(math.radians(self.direction)) * self.speed * 30 * delta_time
+        self.position.x += math.cos(math.radians(self.direction)) * self.speed * 30 * delta_time
+        self.position.y += math.sin(math.radians(self.direction)) * self.speed * 30 * delta_time
 
         if self.rotation_direction == 0:
             self.angle += self.spin

@@ -2,6 +2,7 @@
 
 import arcade
 import math
+import pygame
 import random
 
 
@@ -15,6 +16,7 @@ from constants import (
     SCREEN_WIDTH,
     SCREEN_HEIGHT,
     SHIP_THRUST_AMOUNT,
+    SHIP_RETRO_THRUST_AMOUNT,
     SHIP_TEXTURE,
     SHIP_TEXTURE_THRUST,
     SHIP_TEXTURE_REVERSE,
@@ -34,6 +36,7 @@ class AsteroidsGame(arcade.Window):
 
     def __init__(self, width, height):
         super().__init__(width, height)
+        self.set_update_rate(1/144)
         arcade.set_background_color(arcade.color.SMOKY_BLACK)
 
         self.held_keys = set()
@@ -56,7 +59,7 @@ class AsteroidsGame(arcade.Window):
         for new_asteroid in range(INITIAL_ROCK_COUNT):
             x = random.uniform(0, SCREEN_WIDTH)
             y = random.uniform(0, SCREEN_HEIGHT)
-            new_asteroid = Asteroid("Big", x, y)
+            new_asteroid = Asteroid("Big", x, y, 0)
             self.asteroids.append(new_asteroid)
 
 
@@ -99,7 +102,7 @@ class AsteroidsGame(arcade.Window):
     def draw_stars(self, stars_list):
         
         for star in stars_list:
-            arcade.draw_point(star.x, star.y, star.color, star.size)
+            star.draw()
 
 
     def update(self, delta_time):
@@ -137,27 +140,6 @@ class AsteroidsGame(arcade.Window):
             for star in self.stars_2:
                 star.advance(delta_time)
                 star.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
-
-
-            # self.update_star_positions(self.stars_1, self.ship.get_velocity(), delta_time)
-            # self.update_star_positions(self.stars_2, self.ship.get_velocity(), delta_time)
-
-
-
-    # def update_star_positions(self, stars_list, ship_velocity, delta_time):
-    #     for star in stars_list:
-    #         # Calculate the change in star's position based on its angle and speed
-    #         dx = math.cos(math.radians(star.angle)) * star.speed * delta_time
-    #         dy = math.sin(math.radians(star.angle)) * star.speed * delta_time
-
-    #         # Update the star's position
-    #         star.x += dx - ship_velocity[0]
-    #         star.y += dy - ship_velocity[1]
-
-    #         # Wrap stars around the screen
-    #         if star.x < 0:
-    #             star.x = SCREEN_WIDTH
-    #             star.y = random.uniform(0, SCREEN_HEIGHT)
       
 
     def check_collisions(self):
@@ -170,10 +152,11 @@ class AsteroidsGame(arcade.Window):
 
             too_close_ship = 30 + asteroid.radius
             # Check if the ship is too close from an asteroid, if so, stop the spaceship and kill the spaceship.
-            if (abs(self.ship.center.x - asteroid.center.x) < too_close_ship and
-                    abs(self.ship.center.y - asteroid.center.y) < too_close_ship):
+            if (abs(self.ship.position.x - asteroid.position.x) < too_close_ship and
+                    abs(self.ship.position.y - asteroid.position.y) < too_close_ship):
                 
-                self.ship.velocity = 0
+                self.ship.velocity.dx = 0
+                self.ship.velocity.dy = 0
                 self.ship.alive = False
 
             for bullet in self.bullets:
@@ -182,23 +165,22 @@ class AsteroidsGame(arcade.Window):
 
                     too_close = 30 + asteroid.radius
                     # If the position in X is greater than too_close then kill both the bullet and the asteroid
-                    if (abs(bullet.center.x - asteroid.center.x) < too_close and
-                            abs(bullet.center.y - asteroid.center.y) < too_close):
+                    if (abs(bullet.position.x - asteroid.position.x) < too_close and
+                            abs(bullet.position.y - asteroid.position.y) < too_close):
                         
                         bullet.alive = False
                         asteroid.alive = False
 
                          # Split of big asteroids into smaller ones upon impact of bullet
                         if asteroid.size == "Big":
-
-                            self.asteroids.append(Asteroid("Medium", asteroid.center.x, asteroid.center.y, bullet.angle + 45))
-                            self.asteroids.append(Asteroid("Small", asteroid.center.x, asteroid.center.y, bullet.angle))
-                            self.asteroids.append(Asteroid("Medium", asteroid.center.x, asteroid.center.y, bullet.angle - 45))
+                            self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.angle + 45))
+                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.angle))
+                            self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.angle - 45))
 
                         elif asteroid.size == "Medium":
 
-                            self.asteroids.append(Asteroid("Small", asteroid.center.x, asteroid.center.y, bullet.angle + 45))
-                            self.asteroids.append(Asteroid("Small", asteroid.center.x, asteroid.center.y, bullet.angle - 45))
+                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.angle + 45))
+                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.angle - 45))
         self.cleanup_dead_objects()
 
 
@@ -218,49 +200,51 @@ class AsteroidsGame(arcade.Window):
         """
         Check for key presses and update the ship's behavior accordingly.
         """
-
+        # K E Y     U P
         if arcade.key.UP in self.held_keys:
-            # Calculate the size of each component from its current angle
-            ship_dx = math.cos(math.radians(self.ship.angle))
-            ship_dy = math.sin(math.radians(self.ship.angle))
 
-            self.ship.dx -= ship_dx * SHIP_THRUST_AMOUNT
-            self.ship.dy -= ship_dy * SHIP_THRUST_AMOUNT
+            # # # # # # # # # 
+            #   S H I P
+            # # # # # # # # # 
+            
+            # Calculate the size of each component from its current angle
+            ship_dx = math.cos(math.radians(self.ship.orientation))
+            ship_dy = math.sin(math.radians(self.ship.orientation))
+            # Accelerate!!
+            # Increase the ships velocity vector according to its current orientation and Thust
+            self.ship.velocity -= pygame.Vector2(ship_dx * SHIP_THRUST_AMOUNT, ship_dy * SHIP_THRUST_AMOUNT)
 
             # Update movement of stars
             for star in self.stars_1:
-                star.dx += ship_dx * STARS_1_SPEED
-                star.dy += ship_dy * STARS_1_SPEED
+                star.velocity += pygame.Vector2(ship_dx * STARS_1_SPEED, ship_dy * STARS_1_SPEED)
 
             for star in self.stars_2:
-                star.dx += ship_dx * STARS_2_SPEED
-                star.dy += ship_dy * STARS_2_SPEED
-
+                star.velocity += pygame.Vector2(ship_dx * STARS_2_SPEED, ship_dy * STARS_2_SPEED)
 
             # Draw the different texture
             if random.randint(0, 1) == 0:
                 self.ship.texture = arcade.load_texture(SHIP_TEXTURE_THRUST)
             else:
                 self.ship.texture = arcade.load_texture(SHIP_TEXTURE)
-
-
+                
+                
+        # K E Y   D O W N
         if arcade.key.DOWN in self.held_keys:
+            
             # Calculate the size of each component from its current angle
-            ship_dx = math.cos(math.radians(self.ship.angle))
-            ship_dy = math.sin(math.radians(self.ship.angle))
-
-            # Apply thrust to the ship and change its texture
-            self.ship.dx += ship_dx * SHIP_THRUST_AMOUNT
-            self.ship.dy += ship_dy * SHIP_THRUST_AMOUNT
+            ship_dx = math.cos(math.radians(self.ship.orientation))
+            ship_dy = math.sin(math.radians(self.ship.orientation))
+            # Reverse!
+            # Increase the ships velocity vector according to its current orientation and Thust
+            self.ship.velocity += pygame.Vector2(ship_dx * SHIP_RETRO_THRUST_AMOUNT, ship_dy * SHIP_RETRO_THRUST_AMOUNT)
 
             # Update movement of stars
             for star in self.stars_1:
-                star.dx -= ship_dx * STARS_1_SPEED
-                star.dy -= ship_dy * STARS_1_SPEED
+                star.velocity -= pygame.Vector2(ship_dx * STARS_1_SPEED, ship_dy * STARS_1_SPEED)
 
             for star in self.stars_2:
-                star.dx -= ship_dx * STARS_2_SPEED
-                star.dy -= ship_dy * STARS_2_SPEED
+                star.velocity -= pygame.Vector2(ship_dx * STARS_2_SPEED, ship_dy * STARS_2_SPEED)
+
 
             # Draw the different texture
             if random.randint(0, 1) == 0:
@@ -271,7 +255,7 @@ class AsteroidsGame(arcade.Window):
 
         if arcade.key.LEFT in self.held_keys:
             # self.ship.angle += 3
-            self.ship.dYaw += SHIP_TURN_AMOUNT
+            self.ship.angular_velocity += SHIP_TURN_AMOUNT
 
             # Draw the different texture
             if random.randint(0, 1) == 0:
@@ -282,7 +266,7 @@ class AsteroidsGame(arcade.Window):
 
         if arcade.key.RIGHT in self.held_keys:
             # self.ship.angle -= 3
-            self.ship.dYaw -= SHIP_TURN_AMOUNT
+            self.ship.angular_velocity -= SHIP_TURN_AMOUNT
 
             # Draw the different texture
             if random.randint(0, 1) == 0:
@@ -298,13 +282,13 @@ class AsteroidsGame(arcade.Window):
         if key == arcade.key.SPACE:
             if self.ship.alive:
                 bullet = Bullet()
-                bullet.fire(self.ship.center.x, self.ship.center.y, self.ship.angle, self.ship.velocity)
+                bullet.fire(self.ship.position.x, self.ship.position.y, self.ship.orientation, self.ship.velocity)
                 self.bullets.append(bullet)
 
         if key == arcade.key.ENTER:
 
-            self.ship.center.x = SCREEN_WIDTH / 2
-            self.ship.center.y = SCREEN_HEIGHT / 2
+            self.ship.position.x = SCREEN_WIDTH / 2
+            self.ship.position.y = SCREEN_HEIGHT / 2
             del self.ship
             del self.bullets
             del self.asteroids
@@ -328,7 +312,7 @@ class AsteroidsGame(arcade.Window):
 
                 x = random.uniform(0, SCREEN_WIDTH)
                 y = random.uniform(0, SCREEN_HEIGHT)
-                new_asteroid = Asteroid("Big", x, y)
+                new_asteroid = Asteroid("Big", x, y, random.uniform(0, 360))
                 self.asteroids.append(new_asteroid)
 
         if key == arcade.key.ESCAPE:

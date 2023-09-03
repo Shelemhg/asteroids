@@ -1,6 +1,7 @@
 # objects/star.py
 
-import random, math
+import random, arcade
+
 from objects.flying_object import FlyingObject
 from constants import (
     BASE_COLOR,
@@ -17,8 +18,9 @@ from constants import (
 class Star(FlyingObject):
 
     def __init__(self, x, y, type):
-        self.x = x
-        self.y = y
+        super().__init__()
+        self.position.x = x
+        self.position.y = y
         if type == "1":
             self.size = random.uniform(STARS_2_MIN_SIZE, STARS_2_MAX_SIZE)
         elif type == "2":
@@ -27,7 +29,7 @@ class Star(FlyingObject):
             self.size = random.uniform(STAR_MIN_SIZE, STAR_MAX_SIZE)
 
         self.color = self.generate_random_color()
-        self.velocity = 0  # Speed of the star
+        # self.velocity = 0  # Speed of the star
         self.angle = 0  # Angle at which the star is moving
         self.dx = 0
         self.dy = 0
@@ -52,20 +54,21 @@ class Star(FlyingObject):
     
 
     def advance(self, delta_time):
-        self.x += self.dx
-        self.y += self.dy
+        self.position += self.velocity * delta_time
 
-
+    def draw(self):
+        arcade.draw_point(self.position.x, self.position.y, self.color, self.size)
+            
     def is_off_screen(self, SCREEN_WIDTH, SCREEN_HEIGHT):
         
-        if self.x > SCREEN_WIDTH:
-            self.x = 0
+        if self.position.x > SCREEN_WIDTH:
+            self.position.x = 0
 
-        elif self.x < 0:
-            self.x = SCREEN_WIDTH
+        elif self.position.x < 0:
+            self.position.x = SCREEN_WIDTH
 
-        if self.y > SCREEN_HEIGHT:
-            self.y = 0
+        if self.position.y > SCREEN_HEIGHT:
+            self.position.y = 0
 
-        elif self.y < 0:
-            self.y = SCREEN_HEIGHT
+        elif self.position.y < 0:
+            self.position.y = SCREEN_HEIGHT

@@ -1,7 +1,7 @@
 # constants.py
 
-import arcade, pygame
-from pygame import mixer
+import arcade
+
 # These are Global constants used throughout the game
 SCREEN_WIDTH = 1900
 SCREEN_HEIGHT = 1080
@@ -15,8 +15,9 @@ SHIP_TEXTURE_RIGHT_TURN= "assets/images/spaceshipRight.png"
 SHIP_WIDTH = 100
 SHIP_LENGTH = 100
 
-SHIP_TURN_AMOUNT = .1
-SHIP_THRUST_AMOUNT = 0.25/4
+SHIP_TURN_AMOUNT = .5
+SHIP_THRUST_AMOUNT = 2
+SHIP_RETRO_THRUST_AMOUNT = 1
 SHIP_RADIUS = 30
 
 
@@ -57,8 +58,8 @@ BASE_COLOR = [
 ]
 
 #Speed
-STARS_1_SPEED = 0.001
-STARS_2_SPEED = 0.0003
+STARS_1_SPEED = .5
+STARS_2_SPEED = 1
 
 #Size
 STAR_MIN_SIZE = .2

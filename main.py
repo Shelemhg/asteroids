@@ -1,4 +1,7 @@
+# main.py
+
 import arcade
+
 from game.game import AsteroidsGame
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 
