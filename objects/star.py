@@ -12,6 +12,8 @@ from constants import (
     STARS_2_MAX_SIZE,
     STARS_2_MIN_SIZE,
     STARS_2_MAX_SIZE,
+    STARS_1_SPEED,
+    STARS_2_SPEED
 )
 
 # Define a Star class
@@ -21,15 +23,18 @@ class Star(FlyingObject):
         super().__init__()
         self.position.x = x
         self.position.y = y
+        
         if type == "1":
             self.size = random.uniform(STARS_2_MIN_SIZE, STARS_2_MAX_SIZE)
+            self.speed = STARS_1_SPEED # Assigned speed of the star
         elif type == "2":
             self.size = random.uniform(STARS_1_MIN_SIZE, STARS_2_MAX_SIZE)
+            self.speed = STARS_2_SPEED # Assigned speed of the star
         else:
             self.size = random.uniform(STAR_MIN_SIZE, STAR_MAX_SIZE)
+            self.speed = 0
 
         self.color = self.generate_random_color()
-        # self.velocity = 0  # Speed of the star
         self.angle = 0  # Angle at which the star is moving
         self.dx = 0
         self.dy = 0

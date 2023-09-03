@@ -45,14 +45,12 @@ class AsteroidsGame(arcade.Window):
         self.asteroids = []
 
         # Initialize Stars
-        self.background_stars = []
-        self.stars_1 = []
-        self.stars_2 = []
+        self.stars = []
 
          # Generate stars for each layer
-        self.generate_stars(self.background_stars, NUMBER_OF_BACKGROUND_STARS, "")
-        self.generate_stars(self.stars_1, NUMBER_OF_STARS_1, "1")
-        self.generate_stars(self.stars_2, NUMBER_OF_STARS_2, "2")
+        self.generate_stars(self.stars, NUMBER_OF_BACKGROUND_STARS, "")
+        self.generate_stars(self.stars, NUMBER_OF_STARS_1, "1")
+        self.generate_stars(self.stars, NUMBER_OF_STARS_2, "2")
 
 
         # Initialize asteroids at the start of the game
@@ -77,9 +75,7 @@ class AsteroidsGame(arcade.Window):
         # This will draw the objects in layers in the same order they where rendered
          
         # Draw stars
-        self.draw_stars(self.background_stars)
-        self.draw_stars(self.stars_1)
-        self.draw_stars(self.stars_2)
+        self.draw_stars(self.stars)
 
 
         # Draw ship, asteroids, and bullets
@@ -132,12 +128,7 @@ class AsteroidsGame(arcade.Window):
             # S T A R S
             # --------------
             # Update the position of the far_stars
-            for star in self.stars_1:
-                star.advance(delta_time)
-                star.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
-            
-            # Update the position of the close_stars
-            for star in self.stars_2:
+            for star in self.stars:
                 star.advance(delta_time)
                 star.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
       
@@ -215,12 +206,9 @@ class AsteroidsGame(arcade.Window):
             self.ship.velocity -= pygame.Vector2(ship_dx * SHIP_THRUST_AMOUNT, ship_dy * SHIP_THRUST_AMOUNT)
 
             # Update movement of stars
-            for star in self.stars_1:
-                star.velocity += pygame.Vector2(ship_dx * STARS_1_SPEED, ship_dy * STARS_1_SPEED)
-
-            for star in self.stars_2:
-                star.velocity += pygame.Vector2(ship_dx * STARS_2_SPEED, ship_dy * STARS_2_SPEED)
-
+            for star in self.stars:
+                star.velocity = self.ship.velocity * star.speed
+                
             # Draw the different texture
             if random.randint(0, 1) == 0:
                 self.ship.texture = arcade.load_texture(SHIP_TEXTURE_THRUST)
@@ -239,11 +227,8 @@ class AsteroidsGame(arcade.Window):
             self.ship.velocity += pygame.Vector2(ship_dx * SHIP_RETRO_THRUST_AMOUNT, ship_dy * SHIP_RETRO_THRUST_AMOUNT)
 
             # Update movement of stars
-            for star in self.stars_1:
-                star.velocity -= pygame.Vector2(ship_dx * STARS_1_SPEED, ship_dy * STARS_1_SPEED)
-
-            for star in self.stars_2:
-                star.velocity -= pygame.Vector2(ship_dx * STARS_2_SPEED, ship_dy * STARS_2_SPEED)
+            for star in self.stars:
+                star.velocity = self.ship.velocity * star.speed
 
 
             # Draw the different texture
@@ -296,17 +281,9 @@ class AsteroidsGame(arcade.Window):
             self.bullets = []
             self.asteroids = []
 
-            for star in self.stars_1:
-                # star.velocity = 0
-                # star.angle = 0
-                star.dx = 0
-                star.dy = 0
-            
-            for star in self.stars_2:
-                # star.velocity = 0
-                # star.angle = 0
-                star.dx = 0
-                star.dy = 0
+            # for star in self.stars:
+            #     star.veloci = 0
+            #     star.dy = 0
 
             for new_asteroid in range(INITIAL_ROCK_COUNT):
 
