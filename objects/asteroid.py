@@ -46,19 +46,19 @@ class Asteroid(FlyingObject):
             # Assign a random movement in both x and y components, either possitive or negative
             self.velocity = pygame.Vector2(random.uniform(-BIG_ROCK_SPEED, BIG_ROCK_SPEED), random.uniform(-BIG_ROCK_SPEED, BIG_ROCK_SPEED))
             self.angular_velocity = BIG_ROCK_SPIN
-            self.radius = BIG_ROCK_RADIUS
+            self.radius = self.texture.width - 30
         elif size == "Medium":
             self.texture = arcade.load_texture(MEDIUM_ROCK_TEXTURE)
             # Assign a random movement in both x and y components, either possitive or negative
             self.velocity = pygame.Vector2(random.uniform(-MEDIUM_ROCK_SPEED,MEDIUM_ROCK_SPEED), random.uniform(-MEDIUM_ROCK_SPEED, MEDIUM_ROCK_SPEED))
             self.angular_velocity = MEDIUM_ROCK_SPIN
-            self.radius = MEDIUM_ROCK_RADIUS
+            self.radius = self.texture.width - 5
         else:
             self.texture = arcade.load_texture(SMALL_ROCK_TEXTURE)
             # Assign a random movement in both x and y components, either possitive or negative
             self.velocity = pygame.Vector2(random.uniform(-SMALL_ROCK_SPEED,SMALL_ROCK_SPEED), random.uniform(-SMALL_ROCK_SPEED, SMALL_ROCK_SPEED))
             self.angular_velocity = SMALL_ROCK_SPIN
-            self.radius = SMALL_ROCK_RADIUS
+            self.radius = self.texture.width
 
         self.width = self.texture.width
         self.height = self.texture.height

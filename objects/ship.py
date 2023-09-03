@@ -5,7 +5,14 @@ import arcade, math
 from objects.flying_object import FlyingObject
 
 
-from constants import SHIP_TEXTURE, SHIP_WIDTH, SHIP_LENGTH, SCREEN_WIDTH, SCREEN_HEIGHT
+from constants import (
+    SHIP_TEXTURE, 
+    SHIP_WIDTH, 
+    SHIP_LENGTH, 
+    SHIP_RADIUS, 
+    SCREEN_WIDTH, 
+    SCREEN_HEIGHT
+)
 
 class Ship(FlyingObject):
     
@@ -14,14 +21,10 @@ class Ship(FlyingObject):
         self.texture_orientation = +270
         self.position.x = SCREEN_WIDTH / 2
         self.position.y = SCREEN_HEIGHT / 2
-        # self.direction = +90
         self.angular_velocity = 0      # Yaw speed of the ship
-        # self.dx = 0        # Speed in x
-        # self.dy = 0         # Speed in y
         self.height = SHIP_LENGTH
-        self.radius = 30
+        self.radius = SHIP_RADIUS
         self.texture = arcade.load_texture(SHIP_TEXTURE)
-        # self.velocity = 0
         self.width = SHIP_WIDTH
 
 

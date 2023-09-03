@@ -140,13 +140,11 @@ class AsteroidsGame(arcade.Window):
 
         """
         for asteroid in self.asteroids:
-
-            too_close_ship = 30 + asteroid.radius
             # Check if the ship is too close from an asteroid, if so, stop the spaceship and kill the spaceship.
-            if (abs(self.ship.position.x - asteroid.position.x) < too_close_ship and
-                    abs(self.ship.position.y - asteroid.position.y) < too_close_ship):
+            if (abs(self.ship.position.x - asteroid.position.x) < asteroid.radius and
+                    abs(self.ship.position.y - asteroid.position.y) < asteroid.radius):
                 
-                self.ship.velocity = 0
+                self.ship.velocity = pygame.Vector2(0, 0)
                 self.ship.alive = False
 
             for bullet in self.bullets:
