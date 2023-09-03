@@ -32,8 +32,8 @@ BULLET_COLOR = arcade.color.BRIGHT_GREEN
 INITIAL_ROCK_COUNT = 5
 
 BIG_ROCK_TEXTURE = "assets/images/meteorGrey_big1.png"
-BIG_ROCK_SPIN = 1
-BIG_ROCK_SPEED = 1.5
+BIG_ROCK_SPIN = .4
+BIG_ROCK_SPEED = .5
 BIG_ROCK_RADIUS = 30
 
 MEDIUM_ROCK_TEXTURE = "assets/images/meteorGrey_medium1.png"
