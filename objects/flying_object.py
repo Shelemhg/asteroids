@@ -8,7 +8,7 @@ class FlyingObject:
 
         # Game object properties        
         self.alive = True        
-        self.angle = 0
+        self.texture_orientation = 0
         self.position = pygame.Vector2(0, 0)  # 2D position vector
         self.velocity = pygame.Vector2(0, 0)  # 2D velocity vector
         
@@ -31,7 +31,7 @@ class FlyingObject:
             self.width,
             self.height,
             self.texture,
-            self.angle + 90,
+            self.texture_orientation,
             self.alpha
         )
 

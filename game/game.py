@@ -27,8 +27,6 @@ from constants import (
     NUMBER_OF_BACKGROUND_STARS,
     NUMBER_OF_STARS_1,
     NUMBER_OF_STARS_2,
-    STARS_1_SPEED,
-    STARS_2_SPEED,
 )
 
 
@@ -68,20 +66,20 @@ class AsteroidsGame(arcade.Window):
             star = Star(x, y, type)
             stars_list.append(star)
 
-    # Draw objects 60 times per second
+    # Draw objects 60 times per second. Method part of the Arcade framework, automatically called.    
     def on_draw(self):
-
-        arcade.start_render()
         # This will draw the objects in layers in the same order they where rendered
+        arcade.start_render()        
          
         # Draw stars
         self.draw_stars(self.stars)
 
-
         # Draw ship, asteroids, and bullets
         self.ship.draw()
+        
         for asteroid in self.asteroids:
             asteroid.draw()
+            
         for bullet in self.bullets:
             bullet.draw()
         
@@ -114,11 +112,13 @@ class AsteroidsGame(arcade.Window):
             self.check_collisions()
             self.ship.advance(delta_time)
             self.ship.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
+            
             # Update the position of all the Asteroids
             for asteroid in self.asteroids:
-
+                
                 asteroid.advance(delta_time)
                 asteroid.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
+                
             # Update the position of all the Bullets
             for bullet in self.bullets:
 
@@ -146,8 +146,7 @@ class AsteroidsGame(arcade.Window):
             if (abs(self.ship.position.x - asteroid.position.x) < too_close_ship and
                     abs(self.ship.position.y - asteroid.position.y) < too_close_ship):
                 
-                self.ship.velocity.dx = 0
-                self.ship.velocity.dy = 0
+                self.ship.velocity = 0
                 self.ship.alive = False
 
             for bullet in self.bullets:
@@ -199,8 +198,8 @@ class AsteroidsGame(arcade.Window):
             # # # # # # # # # 
             
             # Calculate the size of each component from its current angle
-            ship_dx = math.cos(math.radians(self.ship.orientation))
-            ship_dy = math.sin(math.radians(self.ship.orientation))
+            ship_dx = math.cos(math.radians(self.ship.texture_orientation))
+            ship_dy = math.sin(math.radians(self.ship.texture_orientation))
             # Accelerate!!
             # Increase the ships velocity vector according to its current orientation and Thust
             self.ship.velocity -= pygame.Vector2(ship_dx * SHIP_THRUST_AMOUNT, ship_dy * SHIP_THRUST_AMOUNT)
@@ -220,8 +219,8 @@ class AsteroidsGame(arcade.Window):
         if arcade.key.DOWN in self.held_keys:
             
             # Calculate the size of each component from its current angle
-            ship_dx = math.cos(math.radians(self.ship.orientation))
-            ship_dy = math.sin(math.radians(self.ship.orientation))
+            ship_dx = math.cos(math.radians(self.ship.texture_orientation))
+            ship_dy = math.sin(math.radians(self.ship.texture_orientation))
             # Reverse!
             # Increase the ships velocity vector according to its current orientation and Thust
             self.ship.velocity += pygame.Vector2(ship_dx * SHIP_RETRO_THRUST_AMOUNT, ship_dy * SHIP_RETRO_THRUST_AMOUNT)
@@ -267,7 +266,7 @@ class AsteroidsGame(arcade.Window):
         if key == arcade.key.SPACE:
             if self.ship.alive:
                 bullet = Bullet()
-                bullet.fire(self.ship.position.x, self.ship.position.y, self.ship.orientation, self.ship.velocity)
+                bullet.fire(self.ship.position.x, self.ship.position.y, self.ship.texture_orientation, self.ship.velocity)
                 self.bullets.append(bullet)
 
         if key == arcade.key.ENTER:

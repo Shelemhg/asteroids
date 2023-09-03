@@ -11,7 +11,7 @@ class Ship(FlyingObject):
     
     def __init__(self):
         super().__init__()
-        self.orientation = +270
+        self.texture_orientation = +270
         self.position.x = SCREEN_WIDTH / 2
         self.position.y = SCREEN_HEIGHT / 2
         # self.direction = +90
@@ -29,13 +29,11 @@ class Ship(FlyingObject):
         # Update position based on velocity
         self.position += self.velocity * delta_time
         # Update orientation based on angular velocity
-        self.orientation += self.angular_velocity * delta_time
+        self.texture_orientation += self.angular_velocity * delta_time
         
         # Ensure orientation stays within [0, 2*pi)
         # self.orientation %= 2 * math.pi
         
-        # self.position.y += self.velocity * delta_time  
-        # self.orientation += self.angular_velocity
 
     def draw(self):
-        arcade.draw_texture_rectangle(self.position.x, self.position.y, self.width, self.height, self.texture, self.orientation + 90, self.alpha)
+        arcade.draw_texture_rectangle(self.position.x, self.position.y, self.width, self.height, self.texture, self.texture_orientation + 90, self.alpha)

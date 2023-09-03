@@ -2,6 +2,7 @@
 
 import arcade
 import math
+import pygame
 import random
 
 from objects.flying_object import FlyingObject
@@ -30,23 +31,34 @@ class Asteroid(FlyingObject):
 
         super().__init__()
         self.size = size
+        
+        self.position.x = x
+        self.position.y = y        
+        
+        # self.texture_orientation = random.randint(0, 360)
+        self.texture_orientation = angle
+        self.rotation_direction = random.randint(0, 1)
+        self.hit_points = 0
+
 
         if size == "Big":
             self.texture = arcade.load_texture(BIG_ROCK_TEXTURE)
-            self.speed = BIG_ROCK_SPEED
-            self.spin = BIG_ROCK_SPIN
+            self.velocity = pygame.Vector2(random.uniform(0,BIG_ROCK_SPEED), random.uniform(0,BIG_ROCK_SPEED))
+            self.angular_velocity = BIG_ROCK_SPIN
             self.radius = BIG_ROCK_RADIUS
         elif size == "Medium":
             self.texture = arcade.load_texture(MEDIUM_ROCK_TEXTURE)
-            self.speed = MEDIUM_ROCK_SPEED
-            self.spin = MEDIUM_ROCK_SPIN
+            self.velocity = pygame.Vector2(random.uniform(0,MEDIUM_ROCK_SPEED), random.uniform(0,MEDIUM_ROCK_SPEED))
+            self.angular_velocity = MEDIUM_ROCK_SPIN
             self.radius = MEDIUM_ROCK_RADIUS
         else:
             self.texture = arcade.load_texture(SMALL_ROCK_TEXTURE)
-            self.speed = SMALL_ROCK_SPEED
-            self.spin = SMALL_ROCK_SPIN
+            self.velocity = pygame.Vector2(random.uniform(0,SMALL_ROCK_SPEED), random.uniform(0,SMALL_ROCK_SPEED))
+            self.angular_velocity = SMALL_ROCK_SPIN
             self.radius = SMALL_ROCK_RADIUS
 
+        self.width = self.texture.width
+        self.height = self.texture.height
         # This following condition checks if the asteroid created is big, and if so, it means that the game just started, so now it will check if the asteroids are too close to the middle, 
         # which is where the spaceship is located, and if so, they should move further away from the spaceship 
 
@@ -63,23 +75,18 @@ class Asteroid(FlyingObject):
                 else:
                     y -= SCREEN_HEIGHT / 4
 
-        self.position.x = x
-        self.position.y = y
-        self.direction = random.uniform(0, 360)
-
-        self.width = self.texture.width
-        self.height = self.texture.height
-        self.angle = angle
-        self.rotation_direction = random.randint(0, 1)
-        self.hit_points = 0
 
 
     def advance(self, delta_time):
-
-        self.position.x += math.cos(math.radians(self.direction)) * self.speed * 30 * delta_time
-        self.position.y += math.sin(math.radians(self.direction)) * self.speed * 30 * delta_time
-
-        if self.rotation_direction == 0:
-            self.angle += self.spin
-        else:
-            self.angle -= self.spin
+        
+        # MOVE based on velocity
+        self.position += self.velocity * delta_time       
+        # print("advancing")
+        
+        # ROTATE either clockwise or counter clockwise, based on angular velocity
+        # if self.rotation_direction == 0:
+        #     self.texture_orientation += self.angular_velocity * delta_time
+        # else:
+        #     self.texture_orientation -= self.angular_velocity * delta_time
+        
+        self.texture_orientation += self.angular_velocity

@@ -23,13 +23,6 @@ class Bullet(FlyingObject):
 
 
     def advance(self, delta_time):
-
-        # self.position.x += self.velocity * math.cos(math.radians(self.angle))
-        # self.position.y += self.velocity * math.sin(math.radians(self.angle))
-        # self.position.x += self.velocity.dx
-        # self.position.y += self.velocity.dy
-
-
         # Update position based on velocity
         self.position += self.velocity * delta_time
         
