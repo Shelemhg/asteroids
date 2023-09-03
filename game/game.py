@@ -66,7 +66,7 @@ class AsteroidsGame(arcade.Window):
             star = Star(x, y, type)
             stars_list.append(star)
 
-    # Draw objects 60 times per second. Method part of the Arcade framework, automatically called.    
+    # Method part of the Arcade framework, automatically called.    
     def on_draw(self):
         # This will draw the objects in layers in the same order they where rendered
         arcade.start_render()        
@@ -109,7 +109,7 @@ class AsteroidsGame(arcade.Window):
         if self.ship.alive:
 
             self.check_keys(delta_time)
-            self.check_collisions()
+            self.check_collisions(delta_time)
             self.ship.advance()
             self.ship.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
             
@@ -131,7 +131,7 @@ class AsteroidsGame(arcade.Window):
                 star.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
       
 
-    def check_collisions(self):
+    def check_collisions(self, delta_time):
         """
         Checks to see if bullets have hit targets.
         Updates scores and removes dead items.
@@ -181,7 +181,7 @@ class AsteroidsGame(arcade.Window):
                 self.asteroids.remove(asteroid)
 
 
-    def check_keys(self):
+    def check_keys(self, delta_time):
 
         """
         Check for key presses and update the ship's behavior accordingly.
@@ -251,7 +251,7 @@ class AsteroidsGame(arcade.Window):
                 self.ship.texture = arcade.load_texture(SHIP_TEXTURE)
 
 
-    def on_key_press(self, key, modifiers):
+    def on_key_press(self, key, delta_time):
 
         self.held_keys.add(key)
 
@@ -284,7 +284,7 @@ class AsteroidsGame(arcade.Window):
             arcade.close_window()
 
 
-    def on_key_release(self, key, modifiers):
+    def on_key_release(self, key, delta_time):
         
         if key in self.held_keys:
 

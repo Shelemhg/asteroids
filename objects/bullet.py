@@ -13,7 +13,6 @@ class Bullet(FlyingObject):
         
         super().__init__()
         self.radius = BULLET_RADIUS
-        # self.velocity = 0
         self.direction = 0
 
 
