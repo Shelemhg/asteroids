@@ -122,7 +122,7 @@ class AsteroidsGame(arcade.Window):
             # Update the position of all the Bullets
             for bullet in self.bullets:
 
-                bullet.advance()
+                bullet.advance(delta_time)
                 bullet.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
 
             # S T A R S
@@ -163,14 +163,14 @@ class AsteroidsGame(arcade.Window):
 
                          # Split of big asteroids into smaller ones upon impact of bullet
                         if asteroid.size == "Big":
-                            self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.angle + 45))
-                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.angle))
-                            self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.angle - 45))
+                            self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.direction + 45))
+                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction))
+                            self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.direction - 45))
 
                         elif asteroid.size == "Medium":
 
-                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.angle + 45))
-                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.angle - 45))
+                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction + 45))
+                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction - 45))
         self.cleanup_dead_objects()
 
 
@@ -206,7 +206,7 @@ class AsteroidsGame(arcade.Window):
 
             # Update movement of stars
             for star in self.stars:
-                star.velocity = self.ship.velocity * star.speed
+                star.velocity = -self.ship.velocity * star.speed
                 
             # Draw the different texture
             if random.randint(0, 1) == 0:
@@ -227,7 +227,7 @@ class AsteroidsGame(arcade.Window):
 
             # Update movement of stars
             for star in self.stars:
-                star.velocity = self.ship.velocity * star.speed
+                star.velocity = -self.ship.velocity * star.speed
 
 
             # Draw the different texture

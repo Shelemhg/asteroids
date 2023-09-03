@@ -59,7 +59,7 @@ class Star(FlyingObject):
     
 
     def advance(self, delta_time):
-        self.position += self.velocity * delta_time
+        self.position += self.velocity
 
     def draw(self):
         arcade.draw_point(self.position.x, self.position.y, self.color, self.size)
