@@ -80,15 +80,13 @@ class Asteroid(FlyingObject):
 
 
 
-    def advance(self, delta_time):
+    def advance(self):
         
         # MOVE based on velocity
         self.position += self.velocity
         
-        # ROTATE either clockwise or counter clockwise, based on angular velocity
+        # ROTATE either clockwise or counter clockwise, at its angular velocity
         if self.rotation_direction == 0:
             self.texture_orientation += self.angular_velocity
         else:
             self.texture_orientation -= self.angular_velocity
-        
-        # self.texture_orientation += self.angular_velocity

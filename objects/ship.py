@@ -25,14 +25,11 @@ class Ship(FlyingObject):
         self.width = SHIP_WIDTH
 
 
-    def advance(self, delta_time):
+    def advance(self):
         # Update position based on velocity
-        self.position += self.velocity * delta_time
+        self.position += self.velocity
         # Update orientation based on angular velocity
-        self.texture_orientation += self.angular_velocity * delta_time
-        
-        # Ensure orientation stays within [0, 2*pi)
-        # self.orientation %= 2 * math.pi
+        self.texture_orientation += self.angular_velocity
         
 
     def draw(self):

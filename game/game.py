@@ -110,26 +110,26 @@ class AsteroidsGame(arcade.Window):
 
             self.check_keys(delta_time)
             self.check_collisions()
-            self.ship.advance(delta_time)
+            self.ship.advance()
             self.ship.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
             
             # Update the position of all the Asteroids
             for asteroid in self.asteroids:
                 
-                asteroid.advance(delta_time)
+                asteroid.advance()
                 asteroid.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
                 
             # Update the position of all the Bullets
             for bullet in self.bullets:
 
-                bullet.advance(delta_time)
+                bullet.advance()
                 bullet.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
 
             # S T A R S
             # --------------
             # Update the position of the far_stars
             for star in self.stars:
-                star.advance(delta_time)
+                star.advance()
                 star.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
       
 

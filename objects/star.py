@@ -58,7 +58,7 @@ class Star(FlyingObject):
         return (r, g, b)
     
 
-    def advance(self, delta_time):
+    def advance(self):
         self.position += self.velocity
 
     def draw(self):
