@@ -25,13 +25,13 @@ class Star(FlyingObject):
         self.position.y = y
         
         if type == "1":
-            self.size = random.uniform(STARS_2_MIN_SIZE, STARS_2_MAX_SIZE)
+            self.size = round(random.uniform(STARS_2_MIN_SIZE, STARS_2_MAX_SIZE), 2)
             self.speed = STARS_1_SPEED # Assigned speed of the star
         elif type == "2":
-            self.size = random.uniform(STARS_1_MIN_SIZE, STARS_2_MAX_SIZE)
+            self.size = round(random.uniform(STARS_1_MIN_SIZE, STARS_2_MAX_SIZE), 2)
             self.speed = STARS_2_SPEED # Assigned speed of the star
         else:
-            self.size = random.uniform(STAR_MIN_SIZE, STAR_MAX_SIZE)
+            self.size = round(random.uniform(STAR_MIN_SIZE, STAR_MAX_SIZE), 2)
             self.speed = 0
 
         self.color = self.generate_random_color()

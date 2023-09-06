@@ -11,11 +11,7 @@ from constants import (
     SHIP_LENGTH, 
     SHIP_RADIUS, 
     SCREEN_WIDTH, 
-    SCREEN_HEIGHT,
-    LEFT_LIMIT,
-    RIGHT_LIMIT,
-    BOTTOM_LIMIT,
-    TOP_LIMIT    
+    SCREEN_HEIGHT
 )
 
 class Ship(FlyingObject):
@@ -38,6 +34,11 @@ class Ship(FlyingObject):
             
         # Update orientation based on angular velocity
         self.texture_orientation += self.angular_velocity
+        
+        if self.texture_orientation > 360:
+            self.texture_orientation = 0
+        elif self.texture_orientation < 0:
+            self.texture_orientation = 360
 
 
     def draw(self):

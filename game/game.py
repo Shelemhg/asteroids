@@ -34,7 +34,7 @@ class AsteroidsGame(arcade.Window):
 
     def __init__(self, width, height):
         super().__init__(width, height)
-        self.set_update_rate(1/144)
+        self.set_update_rate(1/120)
         arcade.set_background_color(arcade.color.SMOKY_BLACK)
 
         self.held_keys = set()
@@ -61,8 +61,8 @@ class AsteroidsGame(arcade.Window):
 
     def generate_stars(self, stars_list, num_stars, type):
         for _ in range(num_stars):
-            x = random.uniform(0, SCREEN_WIDTH)
-            y = random.uniform(0, SCREEN_HEIGHT)
+            x = round(random.uniform(0, SCREEN_WIDTH), 2)
+            y = round(random.uniform(0, SCREEN_HEIGHT), 2)
             star = Star(x, y, type)
             stars_list.append(star)
 
@@ -159,14 +159,16 @@ class AsteroidsGame(arcade.Window):
 
                          # Split of big asteroids into smaller ones upon impact of bullet
                         if asteroid.size == "Big":
+                            
+                            print("New direction: " + str(bullet.direction + 45))
                             self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.direction + 45))
                             self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction))
                             self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.direction - 45))
 
                         elif asteroid.size == "Medium":
 
-                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction + 45))
-                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction - 45))
+                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction))
+                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction))
         self.cleanup_dead_objects()
 
 
@@ -195,7 +197,7 @@ class AsteroidsGame(arcade.Window):
             # Accelerate!!
             # Increase the ships velocity vector according to its current orientation and Thust
             
-            self.ship.velocity -= pygame.Vector2(ship_dx * SHIP_THRUST_AMOUNT, ship_dy * SHIP_THRUST_AMOUNT)
+            self.ship.velocity -= pygame.Vector2(round(ship_dx * SHIP_THRUST_AMOUNT, 2), round(ship_dy * SHIP_THRUST_AMOUNT, 2))
             
             for asteroid in self.asteroids:
                 asteroid.velocity += pygame.Vector2(ship_dx * SHIP_THRUST_AMOUNT, ship_dy * SHIP_THRUST_AMOUNT)
@@ -220,10 +222,10 @@ class AsteroidsGame(arcade.Window):
             # Reverse!
             # Increase the ships velocity vector according to its current orientation and Thust
             
-            self.ship.velocity += pygame.Vector2(ship_dx * SHIP_RETRO_THRUST_AMOUNT, ship_dy * SHIP_RETRO_THRUST_AMOUNT)
+            self.ship.velocity += pygame.Vector2(round(ship_dx * SHIP_RETRO_THRUST_AMOUNT, 2), round(ship_dy * SHIP_RETRO_THRUST_AMOUNT, 2))
             
             for asteroid in self.asteroids:
-                asteroid.velocity -= pygame.Vector2(ship_dx * SHIP_RETRO_THRUST_AMOUNT, ship_dy * SHIP_RETRO_THRUST_AMOUNT)
+                asteroid.velocity -= pygame.Vector2(round(ship_dx * SHIP_RETRO_THRUST_AMOUNT, 2), round(ship_dy * SHIP_RETRO_THRUST_AMOUNT, 2))
 
             # Update movement of stars
             for star in self.stars:

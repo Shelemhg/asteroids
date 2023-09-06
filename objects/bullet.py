@@ -23,16 +23,16 @@ class Bullet(FlyingObject):
 
     def advance(self):
         # Update position based on velocity vector
-        self.position += self.velocity
+        self.position += round(self.velocity, 2)
         
 
     def fire(self, x, y, direction, velocity):
         # Divide the direction angle into its components
-        dx = -math.cos(math.radians(direction))
-        dy = -math.sin(math.radians(direction))
+        dx = round(-math.cos(math.radians(direction)), 2)
+        dy = round(-math.sin(math.radians(direction)), 2)
         # Assign the current direction of the ship to the bullet
-        self.direction = direction
-        # Assign the current ship velocity plus the energy of the shot to the bullet velocity
+        self.direction = round(direction, 2)
+        # Assign the current ship velocity (divided into x and y speed) plus the energy of the shot to the bullet velocity
         self.velocity = pygame.Vector2( velocity.x/100 + dx * 10, velocity.y/100 + dy * 10)
         
         # Declare initial position of the bullet
