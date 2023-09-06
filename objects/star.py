@@ -1,6 +1,6 @@
 # objects/star.py
 
-import random, arcade
+import random, arcade, pygame
 
 from objects.flying_object import FlyingObject
 from constants import (
@@ -17,17 +17,26 @@ from constants import (
 )
 
 # Define a Star class
-class Star(FlyingObject):
+# class Star(FlyingObject):
+class Star(arcade.Sprite):
 
     def __init__(self, x, y, type):
-        super().__init__()
-        self.position.x = x
-        self.position.y = y
         
-        if type == "1":
+        super().__init__()        
+        self.type = type
+        # self.position.x = x
+        # self.position.y = y
+        
+        # Variables for Sprite Object
+        self.position = pygame.Vector2(x, y)  # 2D position vector
+        self.velocity = pygame.Vector2(0, 0)  # 2D velocity vector
+        
+        
+        
+        if type == 1:
             self.size = round(random.uniform(STARS_2_MIN_SIZE, STARS_2_MAX_SIZE), 2)
             self.speed = STARS_1_SPEED # Assigned speed of the star
-        elif type == "2":
+        elif type == 2:
             self.size = round(random.uniform(STARS_1_MIN_SIZE, STARS_2_MAX_SIZE), 2)
             self.speed = STARS_2_SPEED # Assigned speed of the star
         else:
