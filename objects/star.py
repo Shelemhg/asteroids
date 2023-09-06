@@ -24,6 +24,7 @@ class Star(arcade.Sprite):
         
         super().__init__()        
         self.type = type
+        # Variables for regular list
         # self.position.x = x
         # self.position.y = y
         

@@ -114,6 +114,7 @@ class AsteroidsGame(arcade.Window):
         arcade.start_render() 
          
         # Draw stars
+        # if self.frame_count % UPDATE_INTERVAL_ALL_STARS == 0:
         self.draw_stars(self.background_stars)  # Draw your background stars
         self.draw_stars(self.stars)
                 
@@ -173,7 +174,7 @@ class AsteroidsGame(arcade.Window):
             for bullet in self.bullets:
 
                 bullet.advance()
-                bullet.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
+                bullet.bullet_is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
 
             # Update the position of the far_stars
             self.frame_count += 1
@@ -217,15 +218,14 @@ class AsteroidsGame(arcade.Window):
                          # Split of big asteroids into smaller ones upon impact of bullet
                         if asteroid.size == "Big":
                             
-                            print("New direction: " + str(bullet.direction + 45))
                             self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.direction + 45))
                             self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction))
                             self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.direction - 45))
 
                         elif asteroid.size == "Medium":
 
-                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction))
-                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction))
+                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction + 45))
+                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction - 45))
         self.cleanup_dead_objects()
 
 
@@ -254,7 +254,7 @@ class AsteroidsGame(arcade.Window):
         Args:
             delta_time (float): The time elapsed since the last update.
         """
-        # K E Y     U P
+        #   U P    K E Y
         if arcade.key.UP in self.held_keys:
             
             # Calculate the magnitude of each component (x and y) from its current angle
@@ -279,7 +279,7 @@ class AsteroidsGame(arcade.Window):
                 self.ship.texture = self.ship_texture
                 
                 
-        # K E Y   D O W N
+        #    D O W N    K E Y
         if arcade.key.DOWN in self.held_keys:
             
             # Calculate the magnitude of each component (x and y) from its current angle
@@ -303,7 +303,7 @@ class AsteroidsGame(arcade.Window):
             else:
                 self.ship.texture = self.ship_texture
 
-        # K E Y   L E F T
+        #    L E F T    K E Y
         if arcade.key.LEFT in self.held_keys:
             
             self.ship.angular_velocity += SHIP_TURN_AMOUNT
@@ -314,7 +314,7 @@ class AsteroidsGame(arcade.Window):
             else:
                 self.ship.texture = self.ship_texture
 
-        # K E Y   R I G H T
+        #    R I G H T    K E Y
         if arcade.key.RIGHT in self.held_keys:
             
             self.ship.angular_velocity -= SHIP_TURN_AMOUNT

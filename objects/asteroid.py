@@ -28,7 +28,14 @@ from constants import (
 class Asteroid(FlyingObject):
 
     def __init__(self, size, x, y, direction):
-
+        """
+        Creates an asteroid object
+        
+        Args:
+            size (string): Size of the asteroid to create
+            x, y (float): Coordinates for the spawn position of the asteroid
+            direction (float): Angle of the bullet that impacted the asteroid or 0
+        """
         super().__init__()
         self.size = size
         
@@ -47,10 +54,10 @@ class Asteroid(FlyingObject):
             self.velocity = pygame.Vector2(round(random.uniform(-BIG_ROCK_SPEED, BIG_ROCK_SPEED), 2), round(random.uniform(-BIG_ROCK_SPEED, BIG_ROCK_SPEED), 2))
             self.angular_velocity = BIG_ROCK_SPIN
             self.radius = BIG_ROCK_RADIUS
+            
         elif size == "Medium":
             self.texture = arcade.load_texture(MEDIUM_ROCK_TEXTURE)
-            # Assign a random movement in both x and y components, either possitive or negative
-            self.velocity = pygame.Vector2(round(random.uniform(-MEDIUM_ROCK_SPEED,MEDIUM_ROCK_SPEED), 2), round(random.uniform(-MEDIUM_ROCK_SPEED, MEDIUM_ROCK_SPEED), 2))
+            
             self.angular_velocity = MEDIUM_ROCK_SPIN
             self.radius = MEDIUM_ROCK_RADIUS
             
@@ -61,10 +68,14 @@ class Asteroid(FlyingObject):
             
         else:
             self.texture = arcade.load_texture(SMALL_ROCK_TEXTURE)
-            # Assign a random movement in both x and y components, either possitive or negative
-            self.velocity = pygame.Vector2(round(random.uniform(-SMALL_ROCK_SPEED,SMALL_ROCK_SPEED), 2), round(random.uniform(-SMALL_ROCK_SPEED, SMALL_ROCK_SPEED), 2))
+            
             self.angular_velocity = SMALL_ROCK_SPIN
             self.radius = SMALL_ROCK_RADIUS
+            
+            dx = -math.cos(math.radians(direction))
+            dy = -math.sin(math.radians(direction))
+            # Assign a random movement in both x and y components, either possitive or negative
+            self.velocity = round(pygame.Vector2((self.velocity.x + dx) * SMALL_ROCK_SPEED , (self.velocity.y + dy) * SMALL_ROCK_SPEED), 2)
 
         self.width = self.texture.width
         self.height = self.texture.height
