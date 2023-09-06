@@ -1,6 +1,8 @@
 # objects/bullet.py
 
-import arcade, pygame, math
+import arcade 
+import pygame
+import math
 
 from objects.flying_object import FlyingObject
 

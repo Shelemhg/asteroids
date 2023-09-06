@@ -1,6 +1,8 @@
 # objects/star.py
 
-import random, arcade, pygame
+import arcade
+import pygame
+import random
 
 from objects.flying_object import FlyingObject
 from constants import (

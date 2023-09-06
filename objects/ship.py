@@ -1,6 +1,6 @@
 # objects/ship.py
 
-import arcade, math
+import arcade
 
 from objects.flying_object import FlyingObject
 

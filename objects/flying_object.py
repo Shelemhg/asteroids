@@ -1,6 +1,7 @@
 # objects/flying_object.py
 
-import arcade, pygame
+import arcade
+import pygame
 
 class FlyingObject:
 
