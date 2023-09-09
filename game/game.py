@@ -61,6 +61,7 @@ class AsteroidsGame(arcade.Window):
         super().__init__(width, height)
         # points counter
         self.score = 0
+        self.highest_score = 0
         # self.set_update_rate(1/120)
         arcade.set_background_color(arcade.color.SMOKY_BLACK)
         # Load all different textures and get them ready for later use
@@ -145,6 +146,8 @@ class AsteroidsGame(arcade.Window):
         else:
             # Draw current score
             arcade.draw_text("Points: " + str(self.score), SCREEN_WIDTH - 80, 20, arcade.color.WHITE, font_size=15, anchor_x="center")
+            
+            
             
     
     def draw_stars(self, stars_list):
@@ -415,12 +418,20 @@ class AsteroidsGame(arcade.Window):
             
     
     def draw_end_screen(self):
-        
+        # Draw the Game Over text
         arcade.draw_text("Game Over", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, arcade.color.WHITE, font_size=50, anchor_x="center")
         arcade.draw_text("Press ESC to Exit", SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="left")
         arcade.draw_text("Press ENTER to Restart", SCREEN_WIDTH - SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="right")
         
         # Draw final score
-        arcade.draw_text("FINAL SCORE: " + str(self.score), SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3, arcade.color.WHITE, font_size=30, anchor_x="center")
+        arcade.draw_text("FINAL SCORE: " + str(self.score), SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3, arcade.color.GREEN, font_size=25, anchor_x="center")
+        # Check if current score is the highest so far
+        if self.score > self.highest_score:
+            self.highest_score = self.score
+            
+        # Draw highest score
+        arcade.draw_text("Highest Score: " + str(self.highest_score), SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4, arcade.color.WHITE, font_size=25, anchor_x="center")
+        
+        
         
         
