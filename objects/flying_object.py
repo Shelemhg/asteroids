@@ -17,9 +17,9 @@ class FlyingObject:
         # Visual properties
         self.width = 0
         self.height = 0
-        self.radius = 0
         self.alpha = 255
         self.texture = None
+        self.radius = 0
 
 
 

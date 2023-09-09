@@ -91,6 +91,6 @@ STARS_2_MAX_SIZE = STAR_MAX_SIZE*4
 COLOR_VARIATION = 50
 
 # Music
-pygame.mixer.init()
-pygame.mixer.music.load('assets/sounds/adagio_for_strings_tiesto.wav')
-pygame.mixer.music.play(-1)
+# pygame.mixer.init()
+# pygame.mixer.music.load('assets/sounds/adagio_for_strings_tiesto.wav')
+# pygame.mixer.music.play(-1)

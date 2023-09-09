@@ -18,13 +18,18 @@ from constants import (
     STARS_2_SPEED
 )
 
-# Define a Star class
 # class Star(FlyingObject):
 class Star(arcade.Sprite):
 
     def __init__(self, x, y, type):
         
-        super().__init__()        
+        super().__init__()
+        """
+        Draw stars from the specified list.
+
+        Args:
+            stars_list (List[Star]): The list of stars to draw.
+        """     
         self.type = type
         # Variables for regular list
         # self.position.x = x

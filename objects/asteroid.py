@@ -33,31 +33,30 @@ class Asteroid(FlyingObject):
         
         Args:
             size (string): Size of the asteroid to create
-            x, y (float): Coordinates for the spawn position of the asteroid
+            x, y (float): X and Y values for the spawn position of the asteroid
             direction (float): Angle of the bullet that impacted the asteroid or 0
         """
         super().__init__()
-        self.size = size
+        self.size = size      # Size of the asteroid "Big", "Medium" or "Small"
         
-        self.position.x = x
-        self.position.y = y
+        self.position.x = x      # Position in X of the ship on spawn
+        self.position.y = y      # Position in Y of the ship on spawn
         
-        # self.texture_orientation = random.randint(0, 360)
-        self.texture_orientation = direction
+        self.texture_orientation = direction      # Angle of the asteroid's texture on spawn (pointing upwards)
         self.rotation_direction = random.randint(0, 1)  # Assign a random rotation direction
-        self.hit_points = 0
 
 
         if size == "Big":
             self.texture = arcade.load_texture(BIG_ROCK_TEXTURE)
             # Assign a random movement in both x and y components, either possitive or negative
             self.velocity = pygame.Vector2(round(random.uniform(-BIG_ROCK_SPEED, BIG_ROCK_SPEED), 2), round(random.uniform(-BIG_ROCK_SPEED, BIG_ROCK_SPEED), 2))
+            # Define the speed of the spin of the asteroid
             self.angular_velocity = BIG_ROCK_SPIN
             self.radius = BIG_ROCK_RADIUS
             
         elif size == "Medium":
             self.texture = arcade.load_texture(MEDIUM_ROCK_TEXTURE)
-            
+            # Define the speed of the spin of the asteroid
             self.angular_velocity = MEDIUM_ROCK_SPIN
             self.radius = MEDIUM_ROCK_RADIUS
             
@@ -68,7 +67,7 @@ class Asteroid(FlyingObject):
             
         else:
             self.texture = arcade.load_texture(SMALL_ROCK_TEXTURE)
-            
+            # Define the speed of the spin of the asteroid
             self.angular_velocity = SMALL_ROCK_SPIN
             self.radius = SMALL_ROCK_RADIUS
             
