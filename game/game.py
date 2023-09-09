@@ -33,7 +33,17 @@ from constants import (
     LARGE_ROCK_POINTS,
     MEDIUM_ROCK_POINTS,
     SMALL_ROCK_POINTS,
-    PENALTY_PER_SHOT
+    PENALTY_PER_SHOT,
+    MAIN_ENGINE_SOUND,
+    MAIN_ENGINE_SOUND_VOLUME,
+    SHOOTING_SOUND,
+    SHOOTING_SOUND_VOLUME,
+    BACKGROUND_MUSIC,
+    BACKGROUND_MUSIC_VOLUME,
+    EXPLOSION_SOUND,
+    EXPLOSION_SOUND_VOLUME,
+    MEDIUM_EXPLOSION_SOUND,
+    MEDIUM_EXPLOSION_SOUND_VOLUME
 )
 
 
@@ -75,6 +85,20 @@ class AsteroidsGame(arcade.Window):
         self.ship = Ship()
         self.bullets = []
         self.asteroids = []
+        
+        # Sound settings
+        pygame.mixer.init()
+        pygame.mixer.set_num_channels(6)
+        self.background_music_channel = pygame.mixer.Channel(0)
+        self.main_engine_music_channel = pygame.mixer.Channel(1)
+        self.shooting_music_channel = pygame.mixer.Channel(2)
+        self.channel3 = pygame.mixer.Channel(3)
+        self.channel4 = pygame.mixer.Channel(4)
+        self.channel5 = pygame.mixer.Channel(5)
+        
+        
+        self.background_music_channel.play(pygame.mixer.Sound(BACKGROUND_MUSIC))
+        self.background_music_channel.set_volume(BACKGROUND_MUSIC_VOLUME)  
 
         # Initialize Stars
         # self.stars = []
@@ -225,7 +249,7 @@ class AsteroidsGame(arcade.Window):
                         
                         bullet.alive = False
                         asteroid.alive = False
-
+                        
                          # Split of big asteroids into smaller ones upon impact of bullet
                         if asteroid.size == "Big":
                             
@@ -234,6 +258,10 @@ class AsteroidsGame(arcade.Window):
                             self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.direction - 45))
                             # Add corresponding points
                             self.score += LARGE_ROCK_POINTS
+                            
+                            # Play explosion sound
+                            self.channel3.play(pygame.mixer.Sound(EXPLOSION_SOUND))          
+                            self.channel3.set_volume(EXPLOSION_SOUND_VOLUME)
 
                         elif asteroid.size == "Medium":
 
@@ -241,6 +269,10 @@ class AsteroidsGame(arcade.Window):
                             self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction - 45))
                             # Add corresponding points
                             self.score += MEDIUM_ROCK_POINTS
+                            
+                            # Play explosion sound
+                            self.channel4.play(pygame.mixer.Sound(MEDIUM_EXPLOSION_SOUND))          
+                            self.channel4.set_volume(MEDIUM_EXPLOSION_SOUND_VOLUME)
                         else:
                             self.score += SMALL_ROCK_POINTS
                             
@@ -296,6 +328,12 @@ class AsteroidsGame(arcade.Window):
             else:
                 self.ship.texture = self.ship_texture
                 
+                
+            # Play Sound if the main engine music channel is not busy (not playing)
+            if not self.main_engine_music_channel.get_busy():
+                
+                self.main_engine_music_channel.play(pygame.mixer.Sound(MAIN_ENGINE_SOUND))
+                self.main_engine_music_channel.set_volume(MAIN_ENGINE_SOUND_VOLUME)
                 
         #    D O W N    K E Y
         if arcade.key.DOWN in self.held_keys:
@@ -358,7 +396,7 @@ class AsteroidsGame(arcade.Window):
         
         # Hit SPACE to shoot a bullet
         if key == arcade.key.SPACE:
-            
+            # If ship is alive create a bullet and fire it
             if self.ship.alive:
                 bullet = Bullet()
                 bullet.fire(self.ship.position.x, self.ship.position.y, self.ship.texture_orientation, self.ship.velocity)
@@ -367,6 +405,10 @@ class AsteroidsGame(arcade.Window):
                 self.ship.shots += 1
                 # Substract points per shot
                 self.score -= PENALTY_PER_SHOT
+                
+                # Play laser sound
+                self.shooting_music_channel.play(pygame.mixer.Sound(SHOOTING_SOUND))       
+                self.shooting_music_channel.set_volume(SHOOTING_SOUND_VOLUME)
                 
         # Hit ENTER to RESET GAME
         if key == arcade.key.ENTER:

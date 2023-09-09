@@ -11,7 +11,7 @@ SCREEN_HEIGHT = 1080
 LARGE_ROCK_POINTS = 100
 MEDIUM_ROCK_POINTS = 150
 SMALL_ROCK_POINTS = 200
-PENALTY_PER_SHOT = 60
+PENALTY_PER_SHOT = 50
 
 
 # Ship
@@ -98,6 +98,17 @@ STARS_2_MAX_SIZE = STAR_MAX_SIZE*4
 COLOR_VARIATION = 50
 
 # Music
-# pygame.mixer.init()
-# pygame.mixer.music.load('assets/sounds/adagio_for_strings_tiesto.wav')
+MAIN_ENGINE_SOUND = 'assets/sounds/engine.wav'
+MAIN_ENGINE_SOUND_VOLUME = .2
+SHOOTING_SOUND = 'assets/sounds/laser_shot.wav'
+SHOOTING_SOUND_VOLUME = .3
+
+EXPLOSION_SOUND = 'assets/sounds/explosion2.wav'
+EXPLOSION_SOUND_VOLUME = .4
+MEDIUM_EXPLOSION_SOUND = 'assets/sounds/explosion.wav'
+MEDIUM_EXPLOSION_SOUND_VOLUME = .2
+BACKGROUND_MUSIC = 'assets/sounds/adagio_for_strings_tiesto.wav'
+BACKGROUND_MUSIC_VOLUME = .5
+# pygame.mixer.music.load()
 # pygame.mixer.music.play(-1)
+# pygame.mixer.Sound.set_volume(.5)
