@@ -23,12 +23,17 @@ from constants import (
     SHIP_TURN_AMOUNT,
     SHIP_TEXTURE_LEFT_TURN,
     SHIP_TEXTURE_RIGHT_TURN,
+    SHIP_RADIUS,
     INITIAL_ROCK_COUNT,
     NUMBER_OF_BACKGROUND_STARS,
     NUMBER_OF_STARS_1,
     NUMBER_OF_STARS_2,
     UPDATE_INTERVAL_ALL_STARS,
-    UPDATE_INTERVAL_VISIBLE_STARS
+    UPDATE_INTERVAL_VISIBLE_STARS,
+    LARGE_ROCK_POINTS,
+    MEDIUM_ROCK_POINTS,
+    SMALL_ROCK_POINTS,
+    PENALTY_PER_SHOT
 )
 
 
@@ -54,6 +59,8 @@ class AsteroidsGame(arcade.Window):
             height (int): The height of the game window.
         """
         super().__init__(width, height)
+        # points counter
+        self.score = 0
         # self.set_update_rate(1/120)
         arcade.set_background_color(arcade.color.SMOKY_BLACK)
         # Load all different textures and get them ready for later use
@@ -117,6 +124,8 @@ class AsteroidsGame(arcade.Window):
         # if self.frame_count % UPDATE_INTERVAL_ALL_STARS == 0:
         self.draw_stars(self.background_stars)  # Draw your background stars
         self.draw_stars(self.stars)
+        
+
                 
 
         # Draw ship, asteroids, and bullets
@@ -127,15 +136,15 @@ class AsteroidsGame(arcade.Window):
             
         for bullet in self.bullets:
             bullet.draw()
+            
+
         
         # If the ship is not alive, draw the "Game Over" text and instructions to continue.
         if not self.ship.alive:
-            arcade.draw_text("Game Over", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2,
-                             arcade.color.WHITE, font_size=50, anchor_x="center")
-            arcade.draw_text("Press ESC to Exit", SCREEN_WIDTH // 8, 40,
-                             arcade.color.WHITE, font_size=20, anchor_x="left")
-            arcade.draw_text("Press ENTER to Restart", SCREEN_WIDTH - SCREEN_WIDTH // 8, 40,
-                             arcade.color.WHITE, font_size=20, anchor_x="right")
+            self.draw_end_screen()
+        else:
+            # Draw current score
+            arcade.draw_text("Points: " + str(self.score), SCREEN_WIDTH - 80, 20, arcade.color.WHITE, font_size=15, anchor_x="center")
             
     
     def draw_stars(self, stars_list):
@@ -181,9 +190,7 @@ class AsteroidsGame(arcade.Window):
             
             for star in self.stars:
                 star.advance()
-                star.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
-
-                    
+                star.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)                 
       
 
     def check_collisions(self, delta_time):
@@ -196,18 +203,19 @@ class AsteroidsGame(arcade.Window):
 
         """
         for asteroid in self.asteroids:
-            # Check if the ship is too close from an asteroid, if so, stop the spaceship and kill the spaceship.
-            if (abs(self.ship.position.x - asteroid.position.x) < asteroid.radius and
-                    abs(self.ship.position.y - asteroid.position.y) < asteroid.radius):
+            # Check if the ship is too close from an asteroid, if so, stop the game and kill the spaceship.
+            if (abs(self.ship.position.x - asteroid.position.x) - SHIP_RADIUS < asteroid.radius and
+                    abs(self.ship.position.y - asteroid.position.y)  - SHIP_RADIUS < asteroid.radius):
                 
                 self.ship.velocity = pygame.Vector2(0, 0)
                 self.ship.alive = False
+                
 
             for bullet in self.bullets:
                 # Make sure they are both alive before checking for a collision
                 if bullet.alive and asteroid.alive:
 
-                    too_close = 30 + asteroid.radius
+                    too_close = asteroid.radius
                     # If the position in X is greater than too_close then kill both the bullet and the asteroid
                     if (abs(bullet.position.x - asteroid.position.x) < too_close and
                             abs(bullet.position.y - asteroid.position.y) < too_close):
@@ -221,11 +229,18 @@ class AsteroidsGame(arcade.Window):
                             self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.direction + 45))
                             self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction))
                             self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.direction - 45))
+                            # Add corresponding points
+                            self.score += LARGE_ROCK_POINTS
 
                         elif asteroid.size == "Medium":
 
                             self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction + 45))
                             self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction - 45))
+                            # Add corresponding points
+                            self.score += MEDIUM_ROCK_POINTS
+                        else:
+                            self.score += SMALL_ROCK_POINTS
+                            
         self.cleanup_dead_objects()
 
 
@@ -345,24 +360,32 @@ class AsteroidsGame(arcade.Window):
                 bullet = Bullet()
                 bullet.fire(self.ship.position.x, self.ship.position.y, self.ship.texture_orientation, self.ship.velocity)
                 self.bullets.append(bullet)
+                # Count number of shots for later score calculations
+                self.ship.shots += 1
+                # Substract points per shot
+                self.score -= PENALTY_PER_SHOT
                 
         # Hit ENTER to RESET GAME
         if key == arcade.key.ENTER:
 
             self.ship.position.x = SCREEN_WIDTH / 2
             self.ship.position.y = SCREEN_HEIGHT / 2
+            # Delete all objects
             del self.ship
             del self.bullets
             del self.asteroids
+            # Create new ones and reset score
             self.ship = Ship()
             self.bullets = []
             self.asteroids = []
+            self.score = 0
             
+            # Reset speed of all stars
             for star in self.stars:
                 star.velocity = pygame.Vector2(0,0)
-
+            # Create new large asteroids
             for new_asteroid in range(INITIAL_ROCK_COUNT):
-
+                # Define new random locations
                 x = random.uniform(0, SCREEN_WIDTH)
                 y = random.uniform(0, SCREEN_HEIGHT)
                 new_asteroid = Asteroid("Big", x, y, random.uniform(0, 360))
@@ -388,3 +411,16 @@ class AsteroidsGame(arcade.Window):
 
             self.held_keys.remove(key)
             self.ship.texture = arcade.load_texture(SHIP_TEXTURE)
+            
+            
+    
+    def draw_end_screen(self):
+        
+        arcade.draw_text("Game Over", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        arcade.draw_text("Press ESC to Exit", SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="left")
+        arcade.draw_text("Press ENTER to Restart", SCREEN_WIDTH - SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="right")
+        
+        # Draw final score
+        arcade.draw_text("FINAL SCORE: " + str(self.score), SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3, arcade.color.WHITE, font_size=30, anchor_x="center")
+        
+        

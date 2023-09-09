@@ -26,7 +26,7 @@ class Ship(FlyingObject):
         self.texture = arcade.load_texture(SHIP_TEXTURE)      # Loading of the ship's image
         self.texture_orientation = +270      # Angle of the ship's image on spawn (pointing upwards)
         self.radius = SHIP_RADIUS      # Distance to calculate if the object is_off_screen() 
-
+        self.shots = 0     # Number of shots done in order to calculate final score
 
     def advance(self):
         # Update position based on ts own velocity vector (x, y)
