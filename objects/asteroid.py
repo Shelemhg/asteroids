@@ -98,7 +98,7 @@ class Asteroid(FlyingObject):
 
     def advance(self):
         
-        # MOVE based on velocity
+        # MOVE the asteroid based on its velocity
         self.position += round(self.velocity, 2)
         
         # ROTATE either clockwise or counter clockwise, at its angular velocity

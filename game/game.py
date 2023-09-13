@@ -68,9 +68,8 @@ class AsteroidsGame(arcade.Window):
             width (int): The width of the game window.
             height (int): The height of the game window.
         """
-        super().__init__(width, height)
-        # points counter
-        self.score = 0
+        super().__init__(width, height)        
+        self.score = 0     # points counter
         self.highest_score = 0
         # self.set_update_rate(1/120)
         arcade.set_background_color(arcade.color.SMOKY_BLACK)
@@ -80,13 +79,13 @@ class AsteroidsGame(arcade.Window):
         self.reverse_texture = arcade.load_texture(SHIP_TEXTURE_REVERSE)
         self.left_turn_texture = arcade.load_texture(SHIP_TEXTURE_LEFT_TURN)
         self.right_turn_texture = arcade.load_texture(SHIP_TEXTURE_RIGHT_TURN)
-
+        # Initialize objects
         self.held_keys = set()
         self.ship = Ship()
-        self.bullets = []
-        self.asteroids = []
+        self.bullets = []     # List to contain all the Bullet objects
+        self.asteroids = []     # List to contain all the Asteroid objects
         
-        # Sound settings
+        # SOUND settings
         pygame.mixer.init()
         pygame.mixer.set_num_channels(6)
         self.background_music_channel = pygame.mixer.Channel(0)
@@ -94,28 +93,25 @@ class AsteroidsGame(arcade.Window):
         self.shooting_music_channel = pygame.mixer.Channel(2)
         self.channel3 = pygame.mixer.Channel(3)
         self.channel4 = pygame.mixer.Channel(4)
-        self.channel5 = pygame.mixer.Channel(5)
-        
-        
+        self.channel5 = pygame.mixer.Channel(5)        
+        # Start playing background music
         self.background_music_channel.play(pygame.mixer.Sound(BACKGROUND_MUSIC))
         self.background_music_channel.set_volume(BACKGROUND_MUSIC_VOLUME)  
 
         # Initialize Stars
         # self.stars = []
         self.stars = arcade.SpriteList()
-        self.background_stars = arcade.SpriteList()
+        self.background_stars = arcade.SpriteList()     #  We separate this ones as they will not move or update their position   
         
         self.frame_count = 0
         
          # Generate stars for each layer
-        self.generate_stars(self.background_stars, NUMBER_OF_BACKGROUND_STARS, 0)
-        # self.background_texture = arcade.RenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT)
-        
+        self.generate_stars(self.background_stars, NUMBER_OF_BACKGROUND_STARS, 0)      
         self.generate_stars(self.stars, NUMBER_OF_STARS_1, 1)
         self.generate_stars(self.stars, NUMBER_OF_STARS_2, 2)
 
 
-        # Initialize asteroids at the start of the game
+        # Initialize a random position for all asteroids and save them in their corresponding list
         for new_asteroid in range(INITIAL_ROCK_COUNT):
             x = random.uniform(0, SCREEN_WIDTH)
             y = random.uniform(0, SCREEN_HEIGHT)
@@ -125,10 +121,14 @@ class AsteroidsGame(arcade.Window):
             
     def generate_stars(self, stars_list, num_stars, type):
         """
-        Draw stars from the specified list.
+        Receives a list for storage, the number of stars and the tyope to then generate
+        a random location on screen and add to the list a Star object with the corresponding
+        size and coordinates.
 
         Args:
             stars_list (List[Star]): The list of stars to draw.
+            num_stars (int): Number of stars to generate
+            type (int): Type of stars to generate: Background = 0, Layer1 = 1, Layer2 = 2
         """
         for _ in range(num_stars):
             x = round(random.uniform(0, SCREEN_WIDTH), 2)
@@ -139,16 +139,15 @@ class AsteroidsGame(arcade.Window):
     
     def on_draw(self):
         """
-        Arcade framework will call this method automatically to render the objects 
+        Arcade framework will automatically call this method  to render the objects 
         from back to front in the same order of the code.
 
         """
         arcade.start_render() 
          
         # Draw stars
-        # if self.frame_count % UPDATE_INTERVAL_ALL_STARS == 0:
         self.draw_stars(self.background_stars)  # Draw your background stars
-        self.draw_stars(self.stars)
+        self.draw_stars(self.stars)     # Draw the other layer of stars
         
 
                 

@@ -7,14 +7,10 @@ import pygame
 SCREEN_WIDTH = 1900
 SCREEN_HEIGHT = 1080
 
-#  POINTS SYSTEM
-LARGE_ROCK_POINTS = 100
-MEDIUM_ROCK_POINTS = 150
-SMALL_ROCK_POINTS = 200
-PENALTY_PER_SHOT = 50
 
-
-# Ship
+########################
+#       S H I P        #
+########################
 SHIP_TEXTURE = "assets/images/spaceship.png"
 SHIP_TEXTURE_THRUST = "assets/images/spaceship2.png"
 SHIP_TEXTURE_REVERSE = "assets/images/spaceship3.png"
@@ -39,15 +35,19 @@ TOP_LIMIT = SCREEN_HEIGHT - SCREEN_HEIGHT/4
 
 
 
-
-# Bullet
+########################
+#      B U L L E T     #
+########################
 BULLET_SPEED = 40
 BULLET_RADIUS = 10
 BULLET_LIFE = 60
 BULLET_COLOR = arcade.color.BRIGHT_GREEN
 
 
-# Asteroids
+
+###########################
+#    A S T E R O I D S    #
+###########################
 INITIAL_ROCK_COUNT = 5
 
 BIG_ROCK_TEXTURE = "assets/images/meteorGrey_big1.png"
@@ -65,10 +65,17 @@ SMALL_ROCK_SPEED = 2
 SMALL_ROCK_SPIN = 5
 SMALL_ROCK_RADIUS = 23
 
+#  POINTS SYSTEM
+LARGE_ROCK_POINTS = 100
+MEDIUM_ROCK_POINTS = 150
+SMALL_ROCK_POINTS = 200
+PENALTY_PER_SHOT = 50
 
 
-# Stars
-NUMBER_OF_BACKGROUND_STARS = 500
+########################
+#      S T A R S      #
+#######################
+NUMBER_OF_BACKGROUND_STARS = 3000
 NUMBER_OF_STARS_1 = 100
 NUMBER_OF_STARS_2 = 100
 
@@ -97,9 +104,13 @@ STARS_2_MAX_SIZE = STAR_MAX_SIZE*4
 
 COLOR_VARIATION = 50
 
-# Music
-MAIN_ENGINE_SOUND = 'assets/sounds/engine.wav'
-MAIN_ENGINE_SOUND_VOLUME = .2
+
+
+########################
+#      M U S I C       #
+########################
+MAIN_ENGINE_SOUND = 'assets/sounds/engine2.wav'
+MAIN_ENGINE_SOUND_VOLUME = .4
 SHOOTING_SOUND = 'assets/sounds/laser_shot.wav'
 SHOOTING_SOUND_VOLUME = .3
 
@@ -109,6 +120,6 @@ MEDIUM_EXPLOSION_SOUND = 'assets/sounds/explosion.wav'
 MEDIUM_EXPLOSION_SOUND_VOLUME = .2
 BACKGROUND_MUSIC = 'assets/sounds/adagio_for_strings_tiesto.wav'
 BACKGROUND_MUSIC_VOLUME = .5
-# pygame.mixer.music.load()
-# pygame.mixer.music.play(-1)
-# pygame.mixer.Sound.set_volume(.5)
+
+
+BACKGROUND_MUSIC_VOLUME = 0

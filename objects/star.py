@@ -42,19 +42,19 @@ class Star(arcade.Sprite):
         
         
         if type == 1:
-            self.size = round(random.uniform(STARS_2_MIN_SIZE, STARS_2_MAX_SIZE), 2)
-            self.speed = STARS_1_SPEED # Assigned speed of the star
+            self.size = round(random.uniform(STARS_2_MIN_SIZE, STARS_2_MAX_SIZE), 2)     # Assign random size within the parameters
+            self.speed = STARS_1_SPEED     # Assign the speed of the star
         elif type == 2:
-            self.size = round(random.uniform(STARS_1_MIN_SIZE, STARS_2_MAX_SIZE), 2)
-            self.speed = STARS_2_SPEED # Assigned speed of the star
+            self.size = round(random.uniform(STARS_1_MIN_SIZE, STARS_2_MAX_SIZE), 2)     # Assign random size within the parameters
+            self.speed = STARS_2_SPEED # Assign speed of the star
         else:
-            self.size = round(random.uniform(STAR_MIN_SIZE, STAR_MAX_SIZE), 2)
-            self.speed = 0
+            self.size = round(random.uniform(STAR_MIN_SIZE, STAR_MAX_SIZE), 2)     # Assign random size within the parameters
+            self.speed = 0      # Assign speed of the star
 
         self.color = self.generate_random_color()
         self.angle = 0  # Angle at which the star is moving
-        self.dx = 0
-        self.dy = 0
+        self.dx = 0     # Initial movement in X of the star
+        self.dy = 0     # Initial movement in Y of the star
 
     
     def generate_random_color(self):
