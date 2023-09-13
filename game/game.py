@@ -113,8 +113,8 @@ class AsteroidsGame(arcade.Window):
 
         # Initialize a random position for all asteroids and save them in their corresponding list
         for new_asteroid in range(INITIAL_ROCK_COUNT):
-            x = random.uniform(0, SCREEN_WIDTH)
-            y = random.uniform(0, SCREEN_HEIGHT)
+            x = random.randint(0, SCREEN_WIDTH)
+            y = random.randint(0, SCREEN_HEIGHT)
             new_asteroid = Asteroid("Big", x, y, 0)
             self.asteroids.append(new_asteroid)
 
@@ -131,8 +131,8 @@ class AsteroidsGame(arcade.Window):
             type (int): Type of stars to generate: Background = 0, Layer1 = 1, Layer2 = 2
         """
         for _ in range(num_stars):
-            x = round(random.uniform(0, SCREEN_WIDTH), 2)
-            y = round(random.uniform(0, SCREEN_HEIGHT), 2)
+            x = random.randint(0, SCREEN_WIDTH)
+            y = random.randint(0, SCREEN_HEIGHT)
             star = Star(x, y, type)
             stars_list.append(star)
 
@@ -145,12 +145,9 @@ class AsteroidsGame(arcade.Window):
         """
         arcade.start_render() 
          
-        # Draw stars
-        self.draw_stars(self.background_stars)  # Draw your background stars
-        self.draw_stars(self.stars)     # Draw the other layer of stars
-        
-
-                
+        # Draw stars per layer, first background, then the rest of the layers
+        self.background_stars.draw()
+        self.stars.draw()
 
         # Draw ship, asteroids, and bullets
         self.ship.draw()

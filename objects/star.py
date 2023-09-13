@@ -1,62 +1,55 @@
 # objects/star.py
-
 import arcade
 import pygame
 import random
 
-from objects.flying_object import FlyingObject
 from constants import (
     BASE_COLOR,
     COLOR_VARIATION,
     STAR_MIN_SIZE,
     STAR_MAX_SIZE,
     STARS_1_MIN_SIZE,
-    STARS_2_MAX_SIZE,
+    STARS_1_MAX_SIZE,
     STARS_2_MIN_SIZE,
     STARS_2_MAX_SIZE,
     STARS_1_SPEED,
     STARS_2_SPEED
 )
 
-# class Star(FlyingObject):
 class Star(arcade.Sprite):
-
+    
     def __init__(self, x, y, type):
-        
-        super().__init__()
-        """
-        Draw stars from the specified list.
+        """Initialize a star object.
 
         Args:
-            stars_list (List[Star]): The list of stars to draw.
-        """     
+            x (int): X-coordinate to assign to the star.
+            y (int): Y-coordinate to assign to the star.
+            star_type (int): Type of the star to generate:
+                - 0: Background star (no movement).
+                - 1: Layer 1 star with variable size and speed.
+                - 2: Layer 2 star with variable size and speed.
+        """
+        super().__init__()
+
         self.type = type
-        # Variables for regular list
-        # self.position.x = x
-        # self.position.y = y
-        
-        # Variables for Sprite Object
-        self.position = pygame.Vector2(x, y)  # 2D position vector
-        self.velocity = pygame.Vector2(0, 0)  # 2D velocity vector
-        
-        
-        
+        self.center_x = x  # Set the x-coordinate of the center of the sprite
+        self.center_y = y  # Set the y-coordinate of the center of the sprite
+        self.texture = arcade.load_texture("assets/images/star.png")
+
         if type == 1:
-            self.size = round(random.uniform(STARS_2_MIN_SIZE, STARS_2_MAX_SIZE), 2)     # Assign random size within the parameters
-            self.speed = STARS_1_SPEED     # Assign the speed of the star
+            self.width = self.height = round(random.uniform(STARS_1_MIN_SIZE, STARS_1_MAX_SIZE), 2)
+            self.speed = STARS_1_SPEED
         elif type == 2:
-            self.size = round(random.uniform(STARS_1_MIN_SIZE, STARS_2_MAX_SIZE), 2)     # Assign random size within the parameters
-            self.speed = STARS_2_SPEED # Assign speed of the star
+            self.width = self.height = round(random.uniform(STARS_2_MIN_SIZE, STARS_2_MAX_SIZE), 2)
+            self.speed = STARS_2_SPEED
         else:
-            self.size = round(random.uniform(STAR_MIN_SIZE, STAR_MAX_SIZE), 2)     # Assign random size within the parameters
-            self.speed = 0      # Assign speed of the star
+            self.width = self.height = round(random.uniform(STAR_MIN_SIZE, STAR_MAX_SIZE), 2)
+            self.speed = 0
 
         self.color = self.generate_random_color()
         self.angle = 0  # Angle at which the star is moving
-        self.dx = 0     # Initial movement in X of the star
-        self.dy = 0     # Initial movement in Y of the star
+        self.velocity = pygame.Vector2(0, 0)  # Velocity vector (you can set this as needed)
 
-    
     def generate_random_color(self):
         # Choose a random base color
         base_color = random.choice(BASE_COLOR)
@@ -73,24 +66,17 @@ class Star(arcade.Sprite):
         b = max(0, min(255, b + b_variation))
         
         return (r, g, b)
-    
 
     def advance(self):
-        self.position += self.velocity
+        self.center_x += self.velocity.x
+        self.center_y += self.velocity.y
 
-    def draw(self):
-        arcade.draw_point(self.position.x, self.position.y, self.color, self.size)
-            
     def is_off_screen(self, SCREEN_WIDTH, SCREEN_HEIGHT):
-        
-        if self.position.x > SCREEN_WIDTH:
-            self.position.x = 0
-
-        elif self.position.x < 0:
-            self.position.x = SCREEN_WIDTH
-
-        if self.position.y > SCREEN_HEIGHT:
-            self.position.y = 0
-
-        elif self.position.y < 0:
-            self.position.y = SCREEN_HEIGHT
+        if self.right < 0:
+            self.left = SCREEN_WIDTH
+        elif self.left > SCREEN_WIDTH:
+            self.right = 0
+        if self.bottom < 0:
+            self.top = SCREEN_HEIGHT
+        elif self.top > SCREEN_HEIGHT:
+            self.bottom = 0
