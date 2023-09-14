@@ -6,12 +6,12 @@ import math
 
 from objects.flying_object import FlyingObject
 
-from constants import BULLET_RADIUS, BULLET_COLOR, BULLET_SPEED
+from constants import BULLET_COLOR, BULLET_SPEED
 
 
 class Bullet(FlyingObject):
 
-    def __init__(self):
+    def __init__(self, radius):
         """
         Creates a bullet object
         
@@ -20,13 +20,13 @@ class Bullet(FlyingObject):
         """
         
         super().__init__()
-        self.radius = BULLET_RADIUS  # Size of the bullet
+        self.radius = radius  # Size of the bullet
         self.direction = 0  # Angle of movement of the bullet
 
 
     def draw(self):
         # Draw the shape of the bullet using the corresponding arcade function
-        arcade.draw_circle_filled(self.position.x, self.position.y, BULLET_RADIUS, BULLET_COLOR)
+        arcade.draw_circle_filled(self.position.x, self.position.y, self.radius, BULLET_COLOR)
 
 
     def advance(self):
@@ -44,11 +44,14 @@ class Bullet(FlyingObject):
             direction(float): Current angle of the ship texture (from 0-360)
             velocity (Vector(x, y)): Current velocity vector of the ship
         """
+        
         # Split the direction angle into its X and Y components
         dx = round(-math.cos(math.radians(direction)), 2)
         dy = round(-math.sin(math.radians(direction)), 2)
+        
         # Assign the current direction of the ship to the bullet
         self.direction = round(direction, 2)
+        
         # Add the current ship's velocity (divided into x and y speed) to the energy of the shot to the bullet velocity (ship's speed + bullet's speed)
         self.velocity = pygame.Vector2( velocity.x/100 + dx * BULLET_SPEED, velocity.y/100 + dy * BULLET_SPEED)
         
@@ -58,8 +61,8 @@ class Bullet(FlyingObject):
     
     
     def bullet_is_off_screen(self, SCREEN_WIDTH, SCREEN_HEIGHT):
-        # Check if a bullet reaches an edge of the screen, if so, delete the bullet
         
+        # Check if a bullet reaches an edge of the screen, if so, delete the bullet
         if self.position.x > (SCREEN_WIDTH + self.radius):
             self.alive = False
 

@@ -35,6 +35,7 @@ class Star(arcade.Sprite):
         self.center_x = x     # Set the x-coordinate of the center of the sprite
         self.center_y = y     # Set the y-coordinate of the center of the sprite
         self.texture = arcade.load_texture("assets/images/star.png")
+        
         # Assign the width, height and speed of the stars based on the type of start to be created
         if type == 1:
             self.width = self.height = round(random.uniform(STARS_1_MIN_SIZE, STARS_1_MAX_SIZE), 2)
@@ -50,7 +51,9 @@ class Star(arcade.Sprite):
         self.angle = 0  # Angle at which the star is moving
         self.velocity = pygame.Vector2(0, 0)  # Velocity vector (you can set this as needed)
 
+
     def generate_random_color(self):
+        
         # Choose a random base color
         base_color = random.choice(BASE_COLOR)
 
@@ -67,12 +70,16 @@ class Star(arcade.Sprite):
         
         return (r, g, b)
 
+
     def advance(self):
+        
         # Update the position of the star with an increment based on its velocity vector
         self.center_x += self.velocity.x
         self.center_y += self.velocity.y
 
+
     def is_off_screen(self, SCREEN_WIDTH, SCREEN_HEIGHT):
+        
         # If the star is off screen, update its position so it now shows on the oposite side of the screen
         if self.right < 0:
             self.left = SCREEN_WIDTH

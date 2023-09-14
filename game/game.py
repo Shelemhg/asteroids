@@ -5,7 +5,7 @@ import math
 import pygame
 import random
 
-
+# from main_menu import MainMenu
 from objects.asteroid import Asteroid
 from objects.bullet import Bullet
 from objects.ship import Ship
@@ -41,7 +41,8 @@ from constants import (
     EXPLOSION_SOUND,
     EXPLOSION_SOUND_VOLUME,
     MEDIUM_EXPLOSION_SOUND,
-    MEDIUM_EXPLOSION_SOUND_VOLUME
+    MEDIUM_EXPLOSION_SOUND_VOLUME,
+    BULLET_RADIUS
 )
 
 
@@ -58,7 +59,8 @@ class AsteroidsGame(arcade.Window):
         background_stars (arcade.SpriteList): Store background stars.
         frame_count (int): Track frames.
     """
-    def __init__(self, width, height, screen_title):
+    
+    def __init__(self, width, height, screen_title, difficulty):
         """
         Initialize the game window and other game-related objects.
 
@@ -66,38 +68,60 @@ class AsteroidsGame(arcade.Window):
             width (int): The width of the game window.
             height (int): The height of the game window.
         """
+        
         super().__init__(width, height, screen_title)
-             
+        
+        if difficulty == "Easy":
+            
+            self.bullet_radius = BULLET_RADIUS + 5
+            self.penalty_per_shot = PENALTY_PER_SHOT - 30
+            self.initial_rock_count = INITIAL_ROCK_COUNT
+            
+        if difficulty == "Medium":
+            
+            self.bullet_radius = BULLET_RADIUS + 2
+            self.penalty_per_shot = PENALTY_PER_SHOT  - 10
+            self.initial_rock_count = INITIAL_ROCK_COUNT + 3
+            
+        if difficulty == "Hard":
+            
+            self.bullet_radius = BULLET_RADIUS 
+            self.penalty_per_shot = PENALTY_PER_SHOT
+            self.initial_rock_count = INITIAL_ROCK_COUNT + 5
+                
+            
+        
         self.score = 0     # points counter
         self.highest_score = 0
-        # self.set_update_rate(1/120)
+        
         arcade.set_background_color(arcade.color.SMOKY_BLACK)
+        
         # Load all different textures and get them ready for later use
         self.ship_texture = arcade.load_texture(SHIP_TEXTURE)
         self.thrust_texture = arcade.load_texture(SHIP_TEXTURE_THRUST)
         self.reverse_texture = arcade.load_texture(SHIP_TEXTURE_REVERSE)
         self.left_turn_texture = arcade.load_texture(SHIP_TEXTURE_LEFT_TURN)
         self.right_turn_texture = arcade.load_texture(SHIP_TEXTURE_RIGHT_TURN)
+        
         # Initialize objects
         self.held_keys = set()
         self.ship = Ship()
         self.bullets = []     # List to contain all the Bullet objects
         self.asteroids = []     # List to contain all the Asteroid objects
 
+
         # Initialize Stars
         self.stars = arcade.SpriteList()
         self.background_stars = arcade.SpriteList()     #  We separate this ones as they will not move or update their position   
         
-        
-        
-         # Generate stars for each layer
+        # Generate stars for each layer
         self.generate_stars(self.background_stars, NUMBER_OF_BACKGROUND_STARS, 0)      
         self.generate_stars(self.stars, NUMBER_OF_STARS_1, 1)
         self.generate_stars(self.stars, NUMBER_OF_STARS_2, 2)
 
 
         # Initialize a random position for all asteroids and save them in their corresponding list
-        for new_asteroid in range(INITIAL_ROCK_COUNT):
+        for new_asteroid in range(self.initial_rock_count):
             x = random.randint(0, SCREEN_WIDTH)
             y = random.randint(0, SCREEN_HEIGHT)
             new_asteroid = Asteroid("Big", x, y, 0)
@@ -230,6 +254,7 @@ class AsteroidsGame(arcade.Window):
 
         """
         for asteroid in self.asteroids:
+            
             # Check if the ship is too close from an asteroid, if so, stop the game and kill the spaceship.
             if (abs(self.ship.position.x - asteroid.position.x) - SHIP_RADIUS < asteroid.radius and
                     abs(self.ship.position.y - asteroid.position.y)  - SHIP_RADIUS < asteroid.radius):
@@ -242,7 +267,7 @@ class AsteroidsGame(arcade.Window):
                 # Make sure they are both alive before checking for a collision
                 if bullet.alive and asteroid.alive:
 
-                    too_close = asteroid.radius
+                    too_close = asteroid.radius + bullet.radius
                     # If the position in X is greater than too_close then kill both the bullet and the asteroid
                     if (abs(bullet.position.x - asteroid.position.x) < too_close and
                             abs(bullet.position.y - asteroid.position.y) < too_close):
@@ -267,12 +292,14 @@ class AsteroidsGame(arcade.Window):
 
                             self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction + 45))
                             self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction - 45))
+                            
                             # Add corresponding points
                             self.score += MEDIUM_ROCK_POINTS
                             
                             # Play explosion sound
                             self.channel4.play(pygame.mixer.Sound(MEDIUM_EXPLOSION_SOUND))          
                             self.channel4.set_volume(MEDIUM_EXPLOSION_SOUND_VOLUME)
+                        
                         else:
                             self.score += SMALL_ROCK_POINTS
                             
@@ -396,15 +423,19 @@ class AsteroidsGame(arcade.Window):
         
         # Hit SPACE to shoot a bullet
         if key == arcade.key.SPACE:
+            
             # If ship is alive create a bullet and fire it
             if self.ship.alive:
-                bullet = Bullet()
+                
+                bullet = Bullet(self.bullet_radius)
                 bullet.fire(self.ship.position.x, self.ship.position.y, self.ship.texture_orientation, self.ship.velocity)
                 self.bullets.append(bullet)
+                
                 # Count number of shots for later score calculations
                 self.ship.shots += 1
+                
                 # Substract points per shot
-                self.score -= PENALTY_PER_SHOT
+                self.score -= self.penalty_per_shot
                 
                 # Play laser sound
                 self.shooting_music_channel.play(pygame.mixer.Sound(SHOOTING_SOUND))       
@@ -415,10 +446,12 @@ class AsteroidsGame(arcade.Window):
 
             self.ship.position.x = SCREEN_WIDTH / 2
             self.ship.position.y = SCREEN_HEIGHT / 2
+            
             # Delete all objects
             del self.ship
             del self.bullets
             del self.asteroids
+            
             # Create new ones and reset score
             self.ship = Ship()
             self.bullets = []
@@ -428,8 +461,9 @@ class AsteroidsGame(arcade.Window):
             # Reset speed of all stars
             for star in self.stars:
                 star.velocity = pygame.Vector2(0,0)
+            
             # Create new large asteroids
-            for new_asteroid in range(INITIAL_ROCK_COUNT):
+            for new_asteroid in range(self.initial_rock_count):
                 # Define new random locations
                 x = random.uniform(0, SCREEN_WIDTH)
                 y = random.uniform(0, SCREEN_HEIGHT)
@@ -440,6 +474,8 @@ class AsteroidsGame(arcade.Window):
         if key == arcade.key.ESCAPE:
             # Quit Game
             arcade.close_window()
+            # window = MainMenu(SCREEN_WIDTH, SCREEN_HEIGHT, "Menu")
+            # arcade.run()
 
 
     def on_key_release(self, key, delta_time):
@@ -452,6 +488,7 @@ class AsteroidsGame(arcade.Window):
             key ()
             delta_time (float): The time elapsed since the last update.
         """
+        
         if key in self.held_keys:
 
             self.held_keys.remove(key)
@@ -459,6 +496,7 @@ class AsteroidsGame(arcade.Window):
                      
     
     def draw_end_screen(self):
+        
         # Draw the Game Over text
         arcade.draw_text("Game Over", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, arcade.color.WHITE, font_size=50, anchor_x="center")
         arcade.draw_text("Press ESC to Exit", SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="left")
@@ -466,6 +504,7 @@ class AsteroidsGame(arcade.Window):
         
         # Draw final score
         arcade.draw_text("FINAL SCORE: " + str(self.score), SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3, arcade.color.GREEN, font_size=25, anchor_x="center")
+        
         # Check if current score is the highest so far
         if self.score > self.highest_score:
             self.highest_score = self.score

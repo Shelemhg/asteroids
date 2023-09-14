@@ -12,7 +12,6 @@ class FlyingObject:
         self.texture_orientation = 0
         self.position = pygame.Vector2(0, 0)  # 2D position vector
         self.velocity = pygame.Vector2(0, 0)  # 2D velocity vector
-        
 
         # Visual properties
         self.width = 0
@@ -20,8 +19,6 @@ class FlyingObject:
         self.alpha = 255
         self.texture = None
         self.radius = 0
-
-
 
 
     def draw(self):

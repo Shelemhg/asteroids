@@ -36,11 +36,13 @@ class Ship(FlyingObject):
         self.shots = 0     # Number of shots done in order to calculate final score
 
     def advance(self):
+        
         # Update position based on ts own velocity vector (x, y)
         self.position += self.velocity
             
         # Update orientation based on angular velocity
         self.texture_orientation += self.angular_velocity
+        
         # Prevent texture_orientation to become more than 360 or negative and restarting the variable to a positive value between 0 and 360
         if self.texture_orientation > 360:
             self.texture_orientation = 0
@@ -49,5 +51,6 @@ class Ship(FlyingObject):
 
 
     def draw(self):
+        
         # Defines the parameters to draw a rectangle filled with the ship.texture image
         arcade.draw_texture_rectangle(self.position.x, self.position.y, self.width, self.height, self.texture, self.texture_orientation + 90, self.alpha)
