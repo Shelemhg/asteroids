@@ -5,6 +5,7 @@ import arcade
 
 SCREEN_WIDTH = 1900
 SCREEN_HEIGHT = 1080
+SCREEN_TITLE = "Asteroids"
 
 
 ########################

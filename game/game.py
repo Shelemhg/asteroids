@@ -58,7 +58,7 @@ class AsteroidsGame(arcade.Window):
         background_stars (arcade.SpriteList): Store background stars.
         frame_count (int): Track frames.
     """
-    def __init__(self, width, height):
+    def __init__(self, width, height, screen_title):
         """
         Initialize the game window and other game-related objects.
 
@@ -66,7 +66,8 @@ class AsteroidsGame(arcade.Window):
             width (int): The width of the game window.
             height (int): The height of the game window.
         """
-        super().__init__(width, height)        
+        super().__init__(width, height, screen_title)
+             
         self.score = 0     # points counter
         self.highest_score = 0
         # self.set_update_rate(1/120)
@@ -87,7 +88,7 @@ class AsteroidsGame(arcade.Window):
         self.stars = arcade.SpriteList()
         self.background_stars = arcade.SpriteList()     #  We separate this ones as they will not move or update their position   
         
-        self.frame_count = 0
+        
         
          # Generate stars for each layer
         self.generate_stars(self.background_stars, NUMBER_OF_BACKGROUND_STARS, 0)      
@@ -116,7 +117,16 @@ class AsteroidsGame(arcade.Window):
         self.background_music_channel.play(pygame.mixer.Sound(BACKGROUND_MUSIC))
         self.background_music_channel.set_volume(BACKGROUND_MUSIC_VOLUME)  
 
-            
+        
+    
+    def on_show_view(self):
+        """ This is run once when we switch to this view """
+        arcade.set_background_color(arcade.color.DARK_BLUE_GRAY)
+
+        # Enable the UIManager when the view is showm.
+        self.manager.enable()
+        
+          
     def generate_stars(self, stars_list, num_stars, type):
         """
         Receives a list for storage, the number and type of stars to save. Then it
@@ -162,9 +172,7 @@ class AsteroidsGame(arcade.Window):
         else:
             # If the ship is alive, draw current score
             arcade.draw_text("Points: " + str(self.score), SCREEN_WIDTH - 80, 20, arcade.color.WHITE, font_size=15, anchor_x="center")
-            
-            
-            
+                 
     
     def draw_stars(self, stars_list):
         """
@@ -205,7 +213,7 @@ class AsteroidsGame(arcade.Window):
                 bullet.bullet_is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
 
             # Update the position of the far_stars
-            self.frame_count += 1
+            # self.frame_count += 1
             
             for star in self.stars:
                 star.advance()
@@ -466,5 +474,5 @@ class AsteroidsGame(arcade.Window):
         arcade.draw_text("Highest Score: " + str(self.highest_score), SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4, arcade.color.WHITE, font_size=25, anchor_x="center")
         
         
-        
+
         
