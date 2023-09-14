@@ -28,8 +28,6 @@ from constants import (
     NUMBER_OF_BACKGROUND_STARS,
     NUMBER_OF_STARS_1,
     NUMBER_OF_STARS_2,
-    UPDATE_INTERVAL_ALL_STARS,
-    UPDATE_INTERVAL_VISIBLE_STARS,
     LARGE_ROCK_POINTS,
     MEDIUM_ROCK_POINTS,
     SMALL_ROCK_POINTS,
@@ -52,13 +50,13 @@ class AsteroidsGame(arcade.Window):
     Main game class for the Asteroids game.
 
     Attributes:
-        held_keys (set): A set to store held keys.
+        held_keys (set): Store held keys.
         ship (Ship): The player's spaceship.
-        bullets (list): A list to store active bullets.
-        asteroids (list): A list to store active asteroids.
-        stars (arcade.SpriteList): A list to store stars.
-        background_stars (arcade.SpriteList): A list to store background stars.
-        frame_count (int): A counter to track frames.
+        bullets (list): Store active bullets.
+        asteroids (list): Store active asteroids.
+        stars (arcade.SpriteList): Store stars.
+        background_stars (arcade.SpriteList): Store background stars.
+        frame_count (int): Track frames.
     """
     def __init__(self, width, height):
         """
@@ -84,22 +82,8 @@ class AsteroidsGame(arcade.Window):
         self.ship = Ship()
         self.bullets = []     # List to contain all the Bullet objects
         self.asteroids = []     # List to contain all the Asteroid objects
-        
-        # SOUND settings
-        pygame.mixer.init()
-        pygame.mixer.set_num_channels(6)
-        self.background_music_channel = pygame.mixer.Channel(0)
-        self.main_engine_music_channel = pygame.mixer.Channel(1)
-        self.shooting_music_channel = pygame.mixer.Channel(2)
-        self.channel3 = pygame.mixer.Channel(3)
-        self.channel4 = pygame.mixer.Channel(4)
-        self.channel5 = pygame.mixer.Channel(5)        
-        # Start playing background music
-        self.background_music_channel.play(pygame.mixer.Sound(BACKGROUND_MUSIC))
-        self.background_music_channel.set_volume(BACKGROUND_MUSIC_VOLUME)  
 
         # Initialize Stars
-        # self.stars = []
         self.stars = arcade.SpriteList()
         self.background_stars = arcade.SpriteList()     #  We separate this ones as they will not move or update their position   
         
@@ -117,13 +101,27 @@ class AsteroidsGame(arcade.Window):
             y = random.randint(0, SCREEN_HEIGHT)
             new_asteroid = Asteroid("Big", x, y, 0)
             self.asteroids.append(new_asteroid)
+            
+            
+        # SOUND settings
+        pygame.mixer.init()
+        pygame.mixer.set_num_channels(6)
+        self.background_music_channel = pygame.mixer.Channel(0)
+        self.main_engine_music_channel = pygame.mixer.Channel(1)
+        self.shooting_music_channel = pygame.mixer.Channel(2)
+        self.channel3 = pygame.mixer.Channel(3)
+        self.channel4 = pygame.mixer.Channel(4)
+        self.channel5 = pygame.mixer.Channel(5)        
+        # Start playing background music
+        self.background_music_channel.play(pygame.mixer.Sound(BACKGROUND_MUSIC))
+        self.background_music_channel.set_volume(BACKGROUND_MUSIC_VOLUME)  
 
             
     def generate_stars(self, stars_list, num_stars, type):
         """
-        Receives a list for storage, the number of stars and the tyope to then generate
-        a random location on screen and add to the list a Star object with the corresponding
-        size and coordinates.
+        Receives a list for storage, the number and type of stars to save. Then it
+        generates a random location on screen and add to the list a Star object with
+        its corresponding size and coordinates.
 
         Args:
             stars_list (List[Star]): The list of stars to draw.
@@ -157,14 +155,12 @@ class AsteroidsGame(arcade.Window):
             
         for bullet in self.bullets:
             bullet.draw()
-            
-
         
         # If the ship is not alive, draw the "Game Over" text and instructions to continue.
         if not self.ship.alive:
             self.draw_end_screen()
         else:
-            # Draw current score
+            # If the ship is alive, draw current score
             arcade.draw_text("Points: " + str(self.score), SCREEN_WIDTH - 80, 20, arcade.color.WHITE, font_size=15, anchor_x="center")
             
             
@@ -452,8 +448,7 @@ class AsteroidsGame(arcade.Window):
 
             self.held_keys.remove(key)
             self.ship.texture = arcade.load_texture(SHIP_TEXTURE)
-            
-            
+                     
     
     def draw_end_screen(self):
         # Draw the Game Over text

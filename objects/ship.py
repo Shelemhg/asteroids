@@ -17,6 +17,13 @@ from constants import (
 class Ship(FlyingObject):
     
     def __init__(self):
+        """
+        Creates a Ship object
+        
+        Args:
+            No arguments are received as the Ship is only created at the begining of every attempt
+            and is placed in the center of the screen
+        """
         super().__init__()
         self.angular_velocity = 0      # Current turn speed of the ship
         self.position.x = SCREEN_WIDTH / 2      # Position in X of the ship on spawn

@@ -1,9 +1,8 @@
 # constants.py
 
+# Global constants used throughout the game
 import arcade
-import pygame
 
-# These are Global constants used throughout the game
 SCREEN_WIDTH = 1900
 SCREEN_HEIGHT = 1080
 
@@ -23,7 +22,7 @@ SHIP_RADIUS = 27
 
 SHIP_THRUST_AMOUNT = .05
 SHIP_RETRO_THRUST_AMOUNT = .025
-SHIP_TURN_AMOUNT = .08
+SHIP_TURN_AMOUNT = .09
 # SHIP_THRUST_AMOUNT = .015
 # SHIP_RETRO_THRUST_AMOUNT = .005
 # SHIP_TURN_AMOUNT = .03
@@ -63,13 +62,14 @@ MEDIUM_ROCK_RADIUS = 27
 SMALL_ROCK_TEXTURE = "assets/images/meteorGrey_small1.png"
 SMALL_ROCK_SPEED = 2
 SMALL_ROCK_SPIN = 5
-SMALL_ROCK_RADIUS = 23
+SMALL_ROCK_RADIUS = 15
 
 #  POINTS SYSTEM
 LARGE_ROCK_POINTS = 100
 MEDIUM_ROCK_POINTS = 150
 SMALL_ROCK_POINTS = 200
 PENALTY_PER_SHOT = 50
+
 
 
 ########################
@@ -122,4 +122,4 @@ BACKGROUND_MUSIC = 'assets/sounds/adagio_for_strings_tiesto.wav'
 BACKGROUND_MUSIC_VOLUME = .5
 
 
-BACKGROUND_MUSIC_VOLUME = 0
+# BACKGROUND_MUSIC_VOLUME = 0

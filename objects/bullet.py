@@ -12,6 +12,12 @@ from constants import BULLET_RADIUS, BULLET_COLOR, BULLET_SPEED
 class Bullet(FlyingObject):
 
     def __init__(self):
+        """
+        Creates a bullet object
+        
+        Args:
+            No arguments are given here as the object will later be handle by the fire() function
+        """
         
         super().__init__()
         self.radius = BULLET_RADIUS  # Size of the bullet
@@ -31,10 +37,11 @@ class Bullet(FlyingObject):
     def fire(self, x, y, direction, velocity):
         """
         Function called when the SPACE key is pressed
+        It sets the position and the characteristics of the bullet
 
         Args:
-            x, y (float): X and Y values for the spawn of the bullet, in this case with the current ship's position
-            direction(float): Current angle of the ship texture 0-360
+            x, y (float): X and Y coordinates that will indicate the position of the bullet, on fire() they are the same as the current ship's position
+            direction(float): Current angle of the ship texture (from 0-360)
             velocity (Vector(x, y)): Current velocity vector of the ship
         """
         # Split the direction angle into its X and Y components

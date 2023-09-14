@@ -47,35 +47,41 @@ class Asteroid(FlyingObject):
 
 
         if size == "Big":
+            # Load the asteroid's texture
             self.texture = arcade.load_texture(BIG_ROCK_TEXTURE)
             # Assign a random movement in both x and y components, either possitive or negative
             self.velocity = pygame.Vector2(round(random.uniform(-BIG_ROCK_SPEED, BIG_ROCK_SPEED), 2), round(random.uniform(-BIG_ROCK_SPEED, BIG_ROCK_SPEED), 2))
             # Define the speed of the spin of the asteroid
             self.angular_velocity = BIG_ROCK_SPIN
+            # Declares the radius of the asteroid to calculate impact distance to bullets and ship
             self.radius = BIG_ROCK_RADIUS
             
         elif size == "Medium":
+            # Load the asteroid's texture
             self.texture = arcade.load_texture(MEDIUM_ROCK_TEXTURE)
             # Define the speed of the spin of the asteroid
             self.angular_velocity = MEDIUM_ROCK_SPIN
-            self.radius = MEDIUM_ROCK_RADIUS
-            
+            # Obtain the X and Y components from the "direction" angle
             dx = -math.cos(math.radians(direction))
             dy = -math.sin(math.radians(direction))
-            
+            # Assigns to the velocity vector, the values from the "dx" and "dy" components multiplied by the rock speed constant
             self.velocity = round(pygame.Vector2((self.velocity.x + dx) * MEDIUM_ROCK_SPEED , (self.velocity.y + dy) * MEDIUM_ROCK_SPEED), 2)
+            # Declares the radius of the asteroid to calculate impact distance to bullets and ship
+            self.radius = MEDIUM_ROCK_RADIUS
             
         else:
+            # Load the asteroid's texture
             self.texture = arcade.load_texture(SMALL_ROCK_TEXTURE)
             # Define the speed of the spin of the asteroid
             self.angular_velocity = SMALL_ROCK_SPIN
-            self.radius = SMALL_ROCK_RADIUS
-            
+            # Obtain the X and Y components from the "direction" angle
             dx = -math.cos(math.radians(direction))
             dy = -math.sin(math.radians(direction))
             # Assign a random movement in both x and y components, either possitive or negative
             self.velocity = round(pygame.Vector2((self.velocity.x + dx) * SMALL_ROCK_SPEED , (self.velocity.y + dy) * SMALL_ROCK_SPEED), 2)
-
+            # Declares the radius of the asteroid to calculate impact distance to bullets and ship
+            self.radius = SMALL_ROCK_RADIUS
+        # Defines the width and height value from the same values of the texture
         self.width = self.texture.width
         self.height = self.texture.height
         
