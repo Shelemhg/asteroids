@@ -139,19 +139,6 @@ class AsteroidsGame(arcade.Window):
         self.background_music_channel.play(pygame.mixer.Sound(BACKGROUND_MUSIC))
         self.background_music_channel.set_volume(BACKGROUND_MUSIC_VOLUME)  
 
-       
-       
-
-        
-    
-            
-
-    def on_show_view(self):
-        """ This is run once when we switch to this view """
-        arcade.set_background_color(arcade.color.DARK_BLUE_GRAY)
-
-        # Enable the UIManager when the view is showm.
-        self.manager.enable()
         
           
     def generate_stars(self, stars_list, num_stars, type):
