@@ -30,6 +30,7 @@ from constants import (
     NUMBER_OF_BACKGROUND_STARS,
     NUMBER_OF_STARS_1,
     NUMBER_OF_STARS_2,
+    NUMBER_OF_GALAXIES,
     LARGE_ROCK_POINTS,
     MEDIUM_ROCK_POINTS,
     SMALL_ROCK_POINTS,
@@ -121,7 +122,7 @@ class AsteroidsGame(arcade.Window):
         self.generate_stars(self.background_stars, NUMBER_OF_BACKGROUND_STARS, 0)      
         self.generate_stars(self.stars, NUMBER_OF_STARS_1, 1)
         self.generate_stars(self.stars, NUMBER_OF_STARS_2, 2)
-        self.generate_galaxies(self.galaxies , 2)
+        self.generate_galaxies(self.galaxies , NUMBER_OF_GALAXIES)
 
         # Initialize a random position for all asteroids and save them in their corresponding list
         for new_asteroid in range(self.initial_rock_count):
