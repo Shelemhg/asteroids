@@ -14,7 +14,7 @@ import pygame, sys
 from pygame import mixer
 
 pygame.mixer.init()
-mixer.music.load('images/adagio_for_strings_tiesto.wav')
+mixer.music.load('assets/sounds/adagio_for_strings_tiesto.wav')
 mixer.music.play(-1)
 
 # These are Global constants to use throughout the game
@@ -26,25 +26,25 @@ BULLET_SPEED = 10
 BULLET_LIFE = 60
 BULLET_COLOR = arcade.color.BRIGHT_GREEN
 
-SHIP_TEXTURE = "images/playerShip1_orange.png"
-SHIP_TEXTURE2 = "images/playerShip1_orange3.png"
+SHIP_TEXTURE = "assets/images/spaceship.png"
+SHIP_TEXTURE2 = "assets/images/spaceship2.png"
 SHIP_TURN_AMOUNT = 3
 SHIP_THRUST_AMOUNT = 0.25/4
 SHIP_RADIUS = 30
 
 INITIAL_ROCK_COUNT = 5
 
-BIG_ROCK_TEXTURE = "images/meteorGrey_big1.png"
+BIG_ROCK_TEXTURE = "assets/images/meteorGrey_big1.png"
 BIG_ROCK_SPIN = 1
 BIG_ROCK_SPEED = 1.5
 BIG_ROCK_RADIUS = 15
 
-MEDIUM_ROCK_TEXTURE = "images/meteorGrey_medium1.png"
+MEDIUM_ROCK_TEXTURE = "assets/images/meteorGrey_medium1.png"
 MEDIUM_ROCK_SPEED = 1.5
 MEDIUM_ROCK_SPIN = -2
 MEDIUM_ROCK_RADIUS = 5
 
-SMALL_ROCK_TEXTURE = "images/meteorGrey_small1.png"
+SMALL_ROCK_TEXTURE = "assets/images/meteorGrey_small1.png"
 SMALL_ROCK_SPEED = 7
 SMALL_ROCK_SPIN = 5
 SMALL_ROCK_RADIUS = 2
@@ -173,8 +173,8 @@ class Ship(Flying_object):
     def __init__(self):
         super().__init__()
         self.texture = arcade.load_texture(SHIP_TEXTURE)
-        self.width = self.texture.width
-        self.height = self.texture.height
+        self.width = self.texture.width/10
+        self.height = self.texture.height/10
         self.angle = -90
         self.velocity = 0
         self.center.x = SCREEN_WIDTH / 2
@@ -410,9 +410,7 @@ class Game(arcade.Window):
                 
                 self.asteroids.append(new_asteroid)
         if key == arcade.key.ESCAPE:
-            pygame.quit()
-            sys.exit()
-            pygame.display.update()
+            arcade.close_window()
 
     def on_key_release(self, key: int, modifiers: int):
         """

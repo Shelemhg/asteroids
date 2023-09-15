@@ -58,10 +58,54 @@ class Menu:
             
             
         # Create the buttons
-        easy_button = arcade.gui.UIFlatButton(text="Easy", width=200)
-        medium_button = arcade.gui.UIFlatButton(text="Medium", width=200)
-        hard_button = arcade.gui.UIFlatButton(text="Hard", width=200)
-        quit_button = arcade.gui.UIFlatButton(text="Quit", width=200)
+        easy_button = arcade.gui.UIFlatButton(
+                        text="Easy",
+                        width=200,
+                        style={
+                            "bg_color": arcade.color.AO,  # Background color
+                            "hover_bg_color": arcade.color.GREEN,  # Background color on hover
+                            "font_color": arcade.color.WHITE,  # Text color
+                            "border_color": arcade.color.BLACK,  # Border color
+                            "border_width": 4,  # Border width
+                            "font_size": 20,  # Text font size
+                        }
+                    )
+        medium_button = arcade.gui.UIFlatButton(                        
+                        text="Medium",
+                        width=200,
+                        style={
+                            "bg_color": arcade.color.AMBER,  # Background color
+                            "hover_bg_color": arcade.color.GREEN,  # Background color on hover
+                            "font_color": arcade.color.WHITE,  # Text color
+                            "border_color": arcade.color.BLACK,  # Border color
+                            "border_width": 4,  # Border width
+                            "font_size": 20,  # Text font size
+                        }
+                    )
+        hard_button = arcade.gui.UIFlatButton(                        
+                        text="Hard",
+                        width=200,
+                        style={
+                            "bg_color": arcade.color.SAE,  # Background color
+                            "hover_bg_color": arcade.color.GREEN,  # Background color on hover
+                            "font_color": arcade.color.WHITE,  # Text color
+                            "border_color": arcade.color.BLACK,  # Border color
+                            "border_width": 4,  # Border width
+                            "font_size": 20,  # Text font size
+                        }
+                    )
+        quit_button = arcade.gui.UIFlatButton(
+                        text="Quit",
+                        width=200,
+                        style={
+                            "bg_color": arcade.color.ARSENIC,  # Background color
+                            "hover_bg_color": arcade.color.AO,  # Background color on hover
+                            "font_color": arcade.color.WHITE,  # Text color
+                            "border_color": arcade.color.BLACK,  # Border color
+                            "border_width": 4,  # Border width
+                            "font_size": 20,  # Text font size
+                        }
+                    )
 
         # Assign lambda functions to handle the button click events with different arguments
         easy_button.on_click = lambda event: self.on_buttonclick("Easy")
