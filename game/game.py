@@ -11,6 +11,7 @@ from objects.asteroid import Asteroid
 from objects.bullet import Bullet
 from objects.ship import Ship
 from objects.star import Star
+from objects.galaxy import Galaxy
 
 
 from constants import (
@@ -114,12 +115,13 @@ class AsteroidsGame(arcade.Window):
         # Initialize Stars
         self.stars = arcade.SpriteList()
         self.background_stars = arcade.SpriteList()     #  We separate this ones as they will not move or update their position   
+        self.galaxies = arcade.SpriteList()
         
         # Generate stars for each layer
         self.generate_stars(self.background_stars, NUMBER_OF_BACKGROUND_STARS, 0)      
         self.generate_stars(self.stars, NUMBER_OF_STARS_1, 1)
         self.generate_stars(self.stars, NUMBER_OF_STARS_2, 2)
-
+        self.generate_galaxies(self.galaxies , 2)
 
         # Initialize a random position for all asteroids and save them in their corresponding list
         for new_asteroid in range(self.initial_rock_count):
@@ -161,6 +163,14 @@ class AsteroidsGame(arcade.Window):
             star = Star(x, y, type)
             stars_list.append(star)
 
+
+    def generate_galaxies(self, galaxies_list, num_galaxies):
+        for _ in range(num_galaxies):
+            x = random.randint(0, SCREEN_WIDTH)
+            y = random.randint(0, SCREEN_HEIGHT)
+            galaxy = Galaxy(x, y)
+            galaxies_list.append(galaxy)
+    
     
     def on_draw(self):
         """
@@ -177,6 +187,7 @@ class AsteroidsGame(arcade.Window):
             # Draw stars per layer, first background, then the rest of the layers
             self.background_stars.draw()
             self.stars.draw()
+            self.galaxies.draw()
 
             # Draw ship, asteroids, and bullets
             self.ship.draw()
@@ -198,17 +209,6 @@ class AsteroidsGame(arcade.Window):
         else:
             arcade.start_render()
             self.menu.uimanager.draw()
-
-
-    def draw_stars(self, stars_list):
-        """
-        Draw stars from the specified list.
-
-        Args:
-            stars_list (List[Star]): The list of stars to draw.
-        """
-        for star in stars_list:
-            star.draw()
 
 
     def update(self, delta_time):
@@ -243,7 +243,11 @@ class AsteroidsGame(arcade.Window):
             
             for star in self.stars:
                 star.advance()
-                star.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)                 
+                star.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)   
+                
+            for galaxy in self.galaxies:
+                galaxy.advance()
+                galaxy.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)               
       
 
     def check_collisions(self, delta_time):
@@ -318,8 +322,6 @@ class AsteroidsGame(arcade.Window):
         Checks if all bullets and asteroids are not "Alive" in order to remove them
         from the list to avoid future updates and renders. 
 
-        Args:
-            stars_list (List[Star]): The list of stars to draw.
         """
         for bullet in self.bullets:
             if not bullet.alive:
@@ -355,6 +357,9 @@ class AsteroidsGame(arcade.Window):
             # Update movement of stars
             for star in self.stars:
                 star.velocity = -self.ship.velocity * star.speed
+            
+            for galaxy in self.galaxies:
+                galaxy.velocity = -self.ship.velocity * galaxy.speed
                 
             # Switch randomly the regular and the action texture
             if random.randint(0, 1) == 0:
@@ -386,6 +391,9 @@ class AsteroidsGame(arcade.Window):
             # Calculate the movement of stars oposite to the ship one, in order to create the paralax effect
             for star in self.stars:
                 star.velocity = -self.ship.velocity * star.speed
+                
+            for galaxy in self.galaxies:
+                galaxy.velocity = -self.ship.velocity * galaxy.speed
 
             # Switch randomly the regular and the action texture
             if random.randint(0, 1) == 0:
@@ -481,6 +489,9 @@ class AsteroidsGame(arcade.Window):
         # Reset speed of all stars
         for star in self.stars:
             star.velocity = pygame.Vector2(0,0)
+            
+        for galaxy in self.galaxies:
+            galaxy.velocity = pygame.Vector2(0,0)
         
         # Create new large asteroids
         for new_asteroid in range(self.initial_rock_count):
