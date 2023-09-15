@@ -9,7 +9,7 @@ class MainMenu(arcade.Window):
     
     def __init__(self, width, height, screen_title):
         super().__init__(width, height, screen_title)
-        arcade.set_background_color(arcade.color.ASH_GREY)
+        arcade.set_background_color(arcade.color.DARK_BLUE_GRAY)
   
         self.uimanager = arcade.gui.UIManager()
         self.uimanager.enable()

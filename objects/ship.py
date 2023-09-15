@@ -51,6 +51,7 @@ class Ship(FlyingObject):
 
 
     def draw(self):
+        # print(f"X: {self.position.x}, Y: {self.position.y}, W: {self.width}, H: {self.height}, T: {self.texture}, TO: {self.texture_orientation}, A: {self.alpha}")
         
         # Defines the parameters to draw a rectangle filled with the ship.texture image
-        arcade.draw_texture_rectangle(self.position.x, self.position.y, self.width, self.height, self.texture, self.texture_orientation + 90, self.alpha)
+        arcade.draw_texture_rectangle(self.position.x, self.position.y, self.width, self.height, self.texture, self.texture_orientation, self.alpha)

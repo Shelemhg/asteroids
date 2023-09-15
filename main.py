@@ -3,7 +3,7 @@
 import arcade
 
 from main_menu import MainMenu
-from game.game import AsteroidsGame
+# from game.game import AsteroidsGame
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 
 def main():

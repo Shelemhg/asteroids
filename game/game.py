@@ -192,7 +192,7 @@ class AsteroidsGame(arcade.Window):
         
         # If the ship is not alive, draw the "Game Over" text and instructions to continue.
         if not self.ship.alive:
-            self.draw_end_screen()
+            self.draw_game_over_screen()
         else:
             # If the ship is alive, draw current score
             arcade.draw_text("Points: " + str(self.score), SCREEN_WIDTH - 80, 20, arcade.color.WHITE, font_size=15, anchor_x="center")
@@ -495,7 +495,7 @@ class AsteroidsGame(arcade.Window):
             self.ship.texture = arcade.load_texture(SHIP_TEXTURE)
                      
     
-    def draw_end_screen(self):
+    def draw_game_over_screen(self):
         
         # Draw the Game Over text
         arcade.draw_text("Game Over", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, arcade.color.WHITE, font_size=50, anchor_x="center")
