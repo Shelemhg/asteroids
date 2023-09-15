@@ -93,12 +93,6 @@ class AsteroidsGame(arcade.Window):
         # Show the difficulty selection screen
         self.menu.show_difficulty_selection_screen()
         
-        
-        self.score = 0     # points counter
-        self.highest_score = 0
-        
-        
-        
         # Load all different textures and get them ready for later use
         self.ship_texture = arcade.load_texture(SHIP_TEXTURE)
         self.thrust_texture = arcade.load_texture(SHIP_TEXTURE_THRUST)
@@ -111,7 +105,8 @@ class AsteroidsGame(arcade.Window):
         self.ship = Ship()
         self.bullets = []     # List to contain all the Bullet objects
         self.asteroids = []     # List to contain all the Asteroid objects
-
+        self.score = 0     # points counter
+        self.highest_score = 0
 
         # Initialize Stars
         self.stars = arcade.SpriteList()
@@ -149,9 +144,8 @@ class AsteroidsGame(arcade.Window):
           
     def generate_stars(self, stars_list, num_stars, type):
         """
-        Receives a list for storage, the number and type of stars to save. Then it
-        generates a random location on screen and add to the list a Star object with
-        its corresponding size and coordinates.
+        Receives a list for storage, the number and type of stars to save in it. Then it
+        generates a random location on screen for each star and then it adds it to the list of stars.
 
         Args:
             stars_list (List[Star]): The list of stars to draw.
@@ -166,6 +160,15 @@ class AsteroidsGame(arcade.Window):
 
 
     def generate_galaxies(self, galaxies_list, num_galaxies):
+        """
+        Receives a list for storage and the number of galaxies to save in it. Then it
+        generates a random location on screen for each galaxy and then it adds it to the list of galaxies.
+        
+        Args:
+            stars_list (List[Star]): The list of stars to draw.
+            num_stars (int): Number of stars to generate
+            type (int): Type of stars to generate: Background = 0, Layer1 = 1, Layer2 = 2
+        """
         for _ in range(num_galaxies):
             x = random.randint(0, SCREEN_WIDTH)
             y = random.randint(0, SCREEN_HEIGHT)
@@ -214,7 +217,8 @@ class AsteroidsGame(arcade.Window):
 
     def update(self, delta_time):
         """
-        Update the game state.
+        Update all the objects in game every frame.
+        Function called automatically by Arcade framework.
 
         Args:
             delta_time (float): The time elapsed since the last update.
@@ -240,7 +244,6 @@ class AsteroidsGame(arcade.Window):
                 bullet.bullet_is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
 
             # Update the position of the far_stars
-            # self.frame_count += 1
             
             for star in self.stars:
                 star.advance()
@@ -253,8 +256,9 @@ class AsteroidsGame(arcade.Window):
 
     def check_collisions(self, delta_time):
         """
-        Checks to see if bullets or asteroids are too close from other objects which will mean a collition has happened.
-        Updates scores and removes dead items.
+        For each asteroid it checks if they are too close from the ship and also checks if any bullet is too close from the asteroid as well.
+        
+        Updates scores and removes items who have been hit.
         
         Args:
             delta_time (float): The time elapsed since the last update.
@@ -336,7 +340,7 @@ class AsteroidsGame(arcade.Window):
     def check_keys(self, delta_time):
 
         """
-        Checks for key presses and update the ship, asteroids and stars accordingly.
+        Checks for keys pressed and then updates the ship, asteroids and stars accordingly.
         
         Args:
             delta_time (float): The time elapsed since the last update.
@@ -376,6 +380,7 @@ class AsteroidsGame(arcade.Window):
                 self.main_engine_music_channel.set_volume(MAIN_ENGINE_SOUND_VOLUME)
                 
         #    D O W N    K E Y
+        #########################
         if arcade.key.DOWN in self.held_keys:
             
             # Calculate the magnitude of each component (x and y) from its current angle
@@ -403,6 +408,7 @@ class AsteroidsGame(arcade.Window):
                 self.ship.texture = self.ship_texture
 
         #    L E F T    K E Y
+        #########################
         if arcade.key.LEFT in self.held_keys:
             
             self.ship.angular_velocity += SHIP_TURN_AMOUNT
@@ -414,6 +420,7 @@ class AsteroidsGame(arcade.Window):
                 self.ship.texture = self.ship_texture
 
         #    R I G H T    K E Y
+        #########################
         if arcade.key.RIGHT in self.held_keys:
             
             self.ship.angular_velocity -= SHIP_TURN_AMOUNT
@@ -438,6 +445,7 @@ class AsteroidsGame(arcade.Window):
         self.held_keys.add(key)
         
         # Hit SPACE to shoot a bullet
+        #########################
         if key == arcade.key.SPACE:
             
             # If ship is alive create a bullet and fire it
@@ -458,11 +466,13 @@ class AsteroidsGame(arcade.Window):
                 self.shooting_music_channel.set_volume(SHOOTING_SOUND_VOLUME)
                 
         # Hit ENTER to RESET GAME
+        #########################
         if key == arcade.key.ENTER:
 
             self.reset_objects()
                 
         # Hit ESCAPE to quit the game
+        #########################
         if key == arcade.key.ESCAPE:
             # Quit Game
             # arcade.close_window()
@@ -473,8 +483,10 @@ class AsteroidsGame(arcade.Window):
 
     
     def reset_objects(self):
-        self.ship.position.x = SCREEN_WIDTH / 2
-        self.ship.position.y = SCREEN_HEIGHT / 2
+        """
+        Resets the values of all objects, either when the game is restarted after hitting ENTER or after selecting a new level
+        
+        """
         
         # Delete all objects
         del self.ship
