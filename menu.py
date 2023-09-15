@@ -4,6 +4,8 @@ import arcade
 from arcade import gui
 
 from constants import (
+    SCREEN_WIDTH,
+    SCREEN_HEIGHT,
     INITIAL_ROCK_COUNT,
     PENALTY_PER_SHOT,
     BULLET_RADIUS
@@ -17,7 +19,7 @@ class Menu:
         self.uimanager.enable()
 
     def unpause(self, difficulty):
-        self.pause = False
+        self.game.pause = False
     
     def on_buttonclick(self, difficulty):
         # Store the selected difficulty
@@ -33,13 +35,13 @@ class Menu:
             
         if self.game.difficulty == "Medium":
              
-            self.game.bullet_radius = BULLET_RADIUS + 2
+            self.game.bullet_radius = BULLET_RADIUS + 1
             self.game.penalty_per_shot = PENALTY_PER_SHOT  - 10
             self.game.initial_rock_count = INITIAL_ROCK_COUNT + 3
             
         if self.game.difficulty == "Hard":
             
-            self.game.bullet_radius = BULLET_RADIUS 
+            self.game.bullet_radius = BULLET_RADIUS -2
             self.game.penalty_per_shot = PENALTY_PER_SHOT
             self.game.initial_rock_count = INITIAL_ROCK_COUNT + 5
             
@@ -72,7 +74,7 @@ class Menu:
         
         if self.game.difficulty != None:
             resume_button = arcade.gui.UIFlatButton(text="Resume", width=200)            
-            resume_button.on_click = lambda event: self.unpause(self.difficulty)
+            resume_button.on_click = lambda event: self.unpause(self.game.difficulty)
             button_box.add(resume_button)
         
         
@@ -96,4 +98,22 @@ class Menu:
         # Quit Game
         arcade.close_window()
     
-    
+        
+    def draw_game_over_screen(self):
+        
+        # Draw the Game Over text
+        arcade.draw_text("Game Over", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        arcade.draw_text("Press ESC to Show Menu", SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="left")
+        arcade.draw_text("Press ENTER to Restart", SCREEN_WIDTH - SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="right")
+        
+        # Draw final score
+        arcade.draw_text("FINAL SCORE: " + str(self.game.score), SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3, arcade.color.GREEN, font_size=25, anchor_x="center")
+        
+        # Check if current score is the highest so far
+        if self.game.score > self.game.highest_score:
+            self.game.highest_score = self.game.score
+            
+        # Draw highest score
+        arcade.draw_text("Highest Score: " + str(self.game.highest_score), SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4, arcade.color.WHITE, font_size=25, anchor_x="center")
+        
+        

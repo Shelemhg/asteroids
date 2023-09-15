@@ -74,10 +74,13 @@ class AsteroidsGame(arcade.Window):
         
         super().__init__(width, height, screen_title)
         
+        # Pause the game at the start to show Menu first
         self.pause = True
+        
         # Initialize a variable to store the selected difficulty
         self.difficulty = difficulty
         
+        # Initialize values
         self.bullet_radius = BULLET_RADIUS
         self.penalty_per_shot = PENALTY_PER_SHOT
         self.initial_rock_count = INITIAL_ROCK_COUNT
@@ -129,12 +132,12 @@ class AsteroidsGame(arcade.Window):
         # SOUND settings
         pygame.mixer.init()
         pygame.mixer.set_num_channels(6)
-        self.background_music_channel = pygame.mixer.Channel(0)
-        self.main_engine_music_channel = pygame.mixer.Channel(1)
-        self.shooting_music_channel = pygame.mixer.Channel(2)
-        self.channel3 = pygame.mixer.Channel(3)
-        self.channel4 = pygame.mixer.Channel(4)
-        self.channel5 = pygame.mixer.Channel(5)        
+        self.background_music_channel = pygame.mixer.Channel(0)     # Background music
+        self.main_engine_music_channel = pygame.mixer.Channel(1)    # Sound when moving forward
+        self.shooting_music_channel = pygame.mixer.Channel(2)    # Sound when activating thrusters
+        self.channel3 = pygame.mixer.Channel(3)    # Explosion Big Rocks
+        self.channel4 = pygame.mixer.Channel(4)     # Explosion Medium Rocks
+        self.channel5 = pygame.mixer.Channel(5)     # Explosion Small Rocks
         # Start playing background music
         self.background_music_channel.play(pygame.mixer.Sound(BACKGROUND_MUSIC))
         self.background_music_channel.set_volume(BACKGROUND_MUSIC_VOLUME)  
@@ -186,7 +189,7 @@ class AsteroidsGame(arcade.Window):
             
             # If the ship is not alive, draw the "Game Over" text and instructions to continue.
             if not self.ship.alive:
-                self.draw_game_over_screen()
+                self.menu.draw_game_over_screen()
             else:
                 # If the ship is alive, draw current score
                 arcade.draw_text("Points: " + str(self.score), SCREEN_WIDTH - 80, 20, arcade.color.WHITE, font_size=15, anchor_x="center")
@@ -503,25 +506,3 @@ class AsteroidsGame(arcade.Window):
 
             self.held_keys.remove(key)
             self.ship.texture = arcade.load_texture(SHIP_TEXTURE)
-                     
-    
-    def draw_game_over_screen(self):
-        
-        # Draw the Game Over text
-        arcade.draw_text("Game Over", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, arcade.color.WHITE, font_size=50, anchor_x="center")
-        arcade.draw_text("Press ESC to Show Menu", SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="left")
-        arcade.draw_text("Press ENTER to Restart", SCREEN_WIDTH - SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="right")
-        
-        # Draw final score
-        arcade.draw_text("FINAL SCORE: " + str(self.score), SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3, arcade.color.GREEN, font_size=25, anchor_x="center")
-        
-        # Check if current score is the highest so far
-        if self.score > self.highest_score:
-            self.highest_score = self.score
-            
-        # Draw highest score
-        arcade.draw_text("Highest Score: " + str(self.highest_score), SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4, arcade.color.WHITE, font_size=25, anchor_x="center")
-        
-        
-
-        
