@@ -9,7 +9,7 @@ class MainMenu(arcade.Window):
     
     def __init__(self, width, height, screen_title):
         super().__init__(width, height, screen_title)
-        arcade.set_background_color(arcade.color.DARK_BLUE_GRAY)
+        arcade.set_background_color(arcade.color.DARK_GRAY)
   
         self.uimanager = arcade.gui.UIManager()
         self.uimanager.enable()
@@ -24,7 +24,7 @@ class MainMenu(arcade.Window):
         easy_button.on_click = lambda event: self.on_buttonclick("Easy")
         medium_button.on_click = lambda event: self.on_buttonclick("Medium")
         hard_button.on_click = lambda event: self.on_buttonclick("Hard")
-        quit_button.on_click = lambda event:self.on_quit_buttonclick
+        quit_button.on_click = self.on_quit_buttonclick
   
         # Create a UIBoxLayout and add the buttons to it
         button_box = arcade.gui.UIBoxLayout(vertical=True, space_between =20)
@@ -50,7 +50,7 @@ class MainMenu(arcade.Window):
         arcade.run()
     
     
-    def on_quit_buttonclick(event):
+    def on_quit_buttonclick(event, self):
         # Quit Game
         arcade.close_window()
         

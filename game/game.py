@@ -78,7 +78,7 @@ class AsteroidsGame(arcade.Window):
             self.initial_rock_count = INITIAL_ROCK_COUNT
             
         if difficulty == "Medium":
-            
+             
             self.bullet_radius = BULLET_RADIUS + 2
             self.penalty_per_shot = PENALTY_PER_SHOT  - 10
             self.initial_rock_count = INITIAL_ROCK_COUNT + 3
