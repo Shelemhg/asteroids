@@ -2,12 +2,11 @@
 
 import arcade
 
-from main_menu import MainMenu
-# from game.game import AsteroidsGame
+from game.game import AsteroidsGame
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 
 def main():
-    window = MainMenu(SCREEN_WIDTH, SCREEN_HEIGHT, "Menu")
+    window = AsteroidsGame(SCREEN_WIDTH, SCREEN_HEIGHT, "Menu", None)
     arcade.run()
     
 

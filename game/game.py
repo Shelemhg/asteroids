@@ -5,6 +5,7 @@ import math
 import pygame
 import random
 
+from arcade import gui
 # from main_menu import MainMenu
 from objects.asteroid import Asteroid
 from objects.bullet import Bullet
@@ -71,30 +72,22 @@ class AsteroidsGame(arcade.Window):
         
         super().__init__(width, height, screen_title)
         
-        if difficulty == "Easy":
-            
-            self.bullet_radius = BULLET_RADIUS + 5
-            self.penalty_per_shot = PENALTY_PER_SHOT - 30
-            self.initial_rock_count = INITIAL_ROCK_COUNT
-            
-        if difficulty == "Medium":
-             
-            self.bullet_radius = BULLET_RADIUS + 2
-            self.penalty_per_shot = PENALTY_PER_SHOT  - 10
-            self.initial_rock_count = INITIAL_ROCK_COUNT + 3
-            
-        if difficulty == "Hard":
-            
-            self.bullet_radius = BULLET_RADIUS 
-            self.penalty_per_shot = PENALTY_PER_SHOT
-            self.initial_rock_count = INITIAL_ROCK_COUNT + 5
-                
-            
+        self.pause = True
+        # Initialize a variable to store the selected difficulty
+        self.difficulty = difficulty
+        
+        self.bullet_radius = BULLET_RADIUS
+        self.penalty_per_shot = PENALTY_PER_SHOT
+        self.initial_rock_count = INITIAL_ROCK_COUNT
+        
+        # Show the difficulty selection screen
+        self.show_difficulty_selection_screen()
+        
         
         self.score = 0     # points counter
         self.highest_score = 0
         
-        arcade.set_background_color(arcade.color.SMOKY_BLACK)
+        
         
         # Load all different textures and get them ready for later use
         self.ship_texture = arcade.load_texture(SHIP_TEXTURE)
@@ -141,7 +134,87 @@ class AsteroidsGame(arcade.Window):
         self.background_music_channel.play(pygame.mixer.Sound(BACKGROUND_MUSIC))
         self.background_music_channel.set_volume(BACKGROUND_MUSIC_VOLUME)  
 
+       
+       
+    def show_difficulty_selection_screen(self):
         
+        self.uimanager = arcade.gui.UIManager()
+        self.uimanager.enable()
+        
+        arcade.set_background_color(arcade.color.SMOKY_BLACK)
+        self.uimanager.enable()
+
+
+            
+            
+        # Create the buttons
+        easy_button = arcade.gui.UIFlatButton(text="Easy", width=200)
+        medium_button = arcade.gui.UIFlatButton(text="Medium", width=200)
+        hard_button = arcade.gui.UIFlatButton(text="Hard", width=200)
+        quit_button = arcade.gui.UIFlatButton(text="Quit", width=200)
+
+        # Assign lambda functions to handle the button click events with different arguments
+        easy_button.on_click = lambda event: self.on_buttonclick("Easy")
+        medium_button.on_click = lambda event: self.on_buttonclick("Medium")
+        hard_button.on_click = lambda event: self.on_buttonclick("Hard")
+        quit_button.on_click = self.on_quit_buttonclick
+
+        # Create a UIBoxLayout and add the buttons to it
+        button_box = arcade.gui.UIBoxLayout(vertical=True, space_between=20)
+        
+        if self.difficulty != None:
+            resume_button = arcade.gui.UIFlatButton(text="Resume", width=200)            
+            resume_button.on_click = lambda event: self.go_back(self.difficulty)
+            button_box.add(resume_button)
+        
+        
+        
+        button_box.add(easy_button)
+        button_box.add(medium_button)
+        button_box.add(hard_button)
+        button_box.add(quit_button)
+
+        # Add the button box to the UI manager using UIAnchorWidget
+        self.uimanager.add(
+            arcade.gui.UIAnchorWidget(
+                anchor_x="center_x",
+                anchor_y="center_y",
+                child=button_box
+            )
+        )
+        
+    def go_back(self, difficulty):
+        self.pause = False
+    
+    def on_buttonclick(self, difficulty):
+        # Store the selected difficulty
+        self.difficulty = difficulty
+        self.reset_objects()
+        self.pause = False
+        
+        if self.difficulty == "Easy":
+            
+            self.bullet_radius = BULLET_RADIUS + 5
+            self.penalty_per_shot = PENALTY_PER_SHOT - 30
+            self.initial_rock_count = INITIAL_ROCK_COUNT
+            
+        if self.difficulty == "Medium":
+             
+            self.bullet_radius = BULLET_RADIUS + 2
+            self.penalty_per_shot = PENALTY_PER_SHOT  - 10
+            self.initial_rock_count = INITIAL_ROCK_COUNT + 3
+            
+        if self.difficulty == "Hard":
+            
+            self.bullet_radius = BULLET_RADIUS 
+            self.penalty_per_shot = PENALTY_PER_SHOT
+            self.initial_rock_count = INITIAL_ROCK_COUNT + 5
+            
+    
+    def on_quit_buttonclick(event, self):
+        # Quit Game
+        arcade.close_window()
+    
     
     def on_show_view(self):
         """ This is run once when we switch to this view """
@@ -176,28 +249,34 @@ class AsteroidsGame(arcade.Window):
 
         """
         arcade.start_render() 
-         
-        # Draw stars per layer, first background, then the rest of the layers
-        self.background_stars.draw()
-        self.stars.draw()
+        
+        if self.pause is False:
+            arcade.set_background_color(arcade.color.BLACK)
+            # Draw stars per layer, first background, then the rest of the layers
+            self.background_stars.draw()
+            self.stars.draw()
 
-        # Draw ship, asteroids, and bullets
-        self.ship.draw()
-        
-        for asteroid in self.asteroids:
-            asteroid.draw()
+            # Draw ship, asteroids, and bullets
+            self.ship.draw()
             
-        for bullet in self.bullets:
-            bullet.draw()
-        
-        # If the ship is not alive, draw the "Game Over" text and instructions to continue.
-        if not self.ship.alive:
-            self.draw_game_over_screen()
+            for asteroid in self.asteroids:
+                asteroid.draw()
+                
+            for bullet in self.bullets:
+                bullet.draw()
+            
+            # If the ship is not alive, draw the "Game Over" text and instructions to continue.
+            if not self.ship.alive:
+                self.draw_game_over_screen()
+            else:
+                # If the ship is alive, draw current score
+                arcade.draw_text("Points: " + str(self.score), SCREEN_WIDTH - 80, 20, arcade.color.WHITE, font_size=15, anchor_x="center")
         else:
-            # If the ship is alive, draw current score
-            arcade.draw_text("Points: " + str(self.score), SCREEN_WIDTH - 80, 20, arcade.color.WHITE, font_size=15, anchor_x="center")
-                 
-    
+            arcade.start_render()
+            self.uimanager.draw()
+        #     self.start_game()     
+
+
     def draw_stars(self, stars_list):
         """
         Draw stars from the specified list.
@@ -444,38 +523,44 @@ class AsteroidsGame(arcade.Window):
         # Hit ENTER to RESET GAME
         if key == arcade.key.ENTER:
 
-            self.ship.position.x = SCREEN_WIDTH / 2
-            self.ship.position.y = SCREEN_HEIGHT / 2
-            
-            # Delete all objects
-            del self.ship
-            del self.bullets
-            del self.asteroids
-            
-            # Create new ones and reset score
-            self.ship = Ship()
-            self.bullets = []
-            self.asteroids = []
-            self.score = 0
-            
-            # Reset speed of all stars
-            for star in self.stars:
-                star.velocity = pygame.Vector2(0,0)
-            
-            # Create new large asteroids
-            for new_asteroid in range(self.initial_rock_count):
-                # Define new random locations
-                x = random.uniform(0, SCREEN_WIDTH)
-                y = random.uniform(0, SCREEN_HEIGHT)
-                new_asteroid = Asteroid("Big", x, y, random.uniform(0, 360))
-                self.asteroids.append(new_asteroid)
+            self.reset_objects()
                 
         # Hit ESCAPE to quit the game
         if key == arcade.key.ESCAPE:
             # Quit Game
-            arcade.close_window()
+            # arcade.close_window()
+            self.pause = True
+            self.show_difficulty_selection_screen()
             # window = MainMenu(SCREEN_WIDTH, SCREEN_HEIGHT, "Menu")
             # arcade.run()
+
+    
+    def reset_objects(self):
+        self.ship.position.x = SCREEN_WIDTH / 2
+        self.ship.position.y = SCREEN_HEIGHT / 2
+        
+        # Delete all objects
+        del self.ship
+        del self.bullets
+        del self.asteroids
+        
+        # Create new ones and reset score
+        self.ship = Ship()
+        self.bullets = []
+        self.asteroids = []
+        self.score = 0
+        
+        # Reset speed of all stars
+        for star in self.stars:
+            star.velocity = pygame.Vector2(0,0)
+        
+        # Create new large asteroids
+        for new_asteroid in range(self.initial_rock_count):
+            # Define new random locations
+            x = random.uniform(0, SCREEN_WIDTH)
+            y = random.uniform(0, SCREEN_HEIGHT)
+            new_asteroid = Asteroid("Big", x, y, random.uniform(0, 360))
+            self.asteroids.append(new_asteroid)
 
 
     def on_key_release(self, key, delta_time):
