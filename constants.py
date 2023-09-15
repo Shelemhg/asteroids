@@ -118,7 +118,11 @@ SHOOTING_SOUND_VOLUME = .3
 EXPLOSION_SOUND = 'assets/sounds/explosion2.wav'
 EXPLOSION_SOUND_VOLUME = .4
 MEDIUM_EXPLOSION_SOUND = 'assets/sounds/explosion.wav'
-MEDIUM_EXPLOSION_SOUND_VOLUME = .2
+MEDIUM_EXPLOSION_SOUND_VOLUME = .4
+
+SMALL_EXPLOSION_SOUND = 'assets/sounds/explosion.wav'
+SMALL_EXPLOSION_SOUND_VOLUME = .3
+
 BACKGROUND_MUSIC = 'assets/sounds/adagio_for_strings_tiesto.wav'
 BACKGROUND_MUSIC_VOLUME = .5
 

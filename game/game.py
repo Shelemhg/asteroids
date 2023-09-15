@@ -43,6 +43,8 @@ from constants import (
     EXPLOSION_SOUND_VOLUME,
     MEDIUM_EXPLOSION_SOUND,
     MEDIUM_EXPLOSION_SOUND_VOLUME,
+    SMALL_EXPLOSION_SOUND,
+    SMALL_EXPLOSION_SOUND_VOLUME,
     BULLET_RADIUS
 )
 
@@ -141,7 +143,7 @@ class AsteroidsGame(arcade.Window):
         self.uimanager = arcade.gui.UIManager()
         self.uimanager.enable()
         
-        arcade.set_background_color(arcade.color.SMOKY_BLACK)
+        arcade.set_background_color(arcade.color.ARSENIC)
         self.uimanager.enable()
 
 
@@ -382,6 +384,11 @@ class AsteroidsGame(arcade.Window):
                         else:
                             self.score += SMALL_ROCK_POINTS
                             
+                            # Play explosion sound
+                            self.channel5.play(pygame.mixer.Sound(SMALL_EXPLOSION_SOUND))          
+                            self.channel5.set_volume(SMALL_EXPLOSION_SOUND_VOLUME)
+                            
+                            
         self.cleanup_dead_objects()
 
 
@@ -584,7 +591,7 @@ class AsteroidsGame(arcade.Window):
         
         # Draw the Game Over text
         arcade.draw_text("Game Over", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, arcade.color.WHITE, font_size=50, anchor_x="center")
-        arcade.draw_text("Press ESC to Exit", SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="left")
+        arcade.draw_text("Press ESC to Show Menu", SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="left")
         arcade.draw_text("Press ENTER to Restart", SCREEN_WIDTH - SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="right")
         
         # Draw final score
