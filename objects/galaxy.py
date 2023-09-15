@@ -12,7 +12,8 @@ from constants import (
 class Galaxy(arcade.Sprite):
     
     def __init__(self, x, y):
-        """Initialize a galaxy object.
+        """
+        Initialize a galaxy object.
 
         Args:
             x (int): X-coordinate to assign to the galaxy.

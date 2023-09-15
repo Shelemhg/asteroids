@@ -13,49 +13,68 @@ from constants import (
 
 
 class Menu:
+    
     def __init__(self, game):
+        """
+        Initialize a Menu object.
+
+        Args:
+            game (AsteroidGame): Game object from the main game logic
+        """
         self.game = game
         self.uimanager = arcade.gui.UIManager()
         self.uimanager.enable()
 
+
     def unpause(self, difficulty):
+        
+        # Switch the state of the game to unpaused
         self.game.pause = False
     
+    
     def on_buttonclick(self, difficulty):
-        # Store the selected difficulty
+        
+        # Store the selected difficulty after a button is clicked
         self.game.difficulty = difficulty
         self.game.reset_objects()
         self.game.pause = False
         
+        # Define the variables related to the selected difficulty
         if self.game.difficulty == "Easy":
             
+            # Increase the size of the bullet to hit asteroids easier
             self.game.bullet_radius = BULLET_RADIUS + 5
+            # Decrease the cost in points for every shot
             self.game.penalty_per_shot = PENALTY_PER_SHOT - 30
+            # Set the number of large rocks on spawns
             self.game.initial_rock_count = INITIAL_ROCK_COUNT
             
         if self.game.difficulty == "Medium":
              
+            # Define a smaller size for the bullets to hit asteroids harder
             self.game.bullet_radius = BULLET_RADIUS + 1
+            # Decrease the cost in points for every shot
             self.game.penalty_per_shot = PENALTY_PER_SHOT  - 10
+            # Set the number of large rocks on spawns
             self.game.initial_rock_count = INITIAL_ROCK_COUNT + 3
             
         if self.game.difficulty == "Hard":
             
+            # Define a smaller size for the bullets to hit asteroids harder
             self.game.bullet_radius = BULLET_RADIUS -2
+            # Set the cost in points for every shot
             self.game.penalty_per_shot = PENALTY_PER_SHOT
+            # Set the number of large rocks on spawns
             self.game.initial_rock_count = INITIAL_ROCK_COUNT + 5
             
             
     def show_difficulty_selection_screen(self):
         
+        # Instanciate objects for the creation of the UI
         self.uimanager = arcade.gui.UIManager()
         self.uimanager.enable()
         
         arcade.set_background_color(arcade.color.ARSENIC)
-        self.uimanager.enable()
-
-
-            
             
         # Create the buttons
         easy_button = arcade.gui.UIFlatButton(
@@ -139,6 +158,7 @@ class Menu:
         
             
     def on_quit_buttonclick(event, self):
+        
         # Quit Game
         arcade.close_window()
     
