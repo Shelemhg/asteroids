@@ -196,8 +196,15 @@ class AsteroidsGame(arcade.Window):
             # Draw ship, asteroids, and bullets
             self.ship.draw()
             
-            for asteroid in self.asteroids:
-                asteroid.draw()
+            # If there is no more asteroids left, draw the win screen
+            if not self.asteroids:
+                
+                self.menu.draw_win_screen()
+                
+            else:
+                
+                for asteroid in self.asteroids:
+                    asteroid.draw()
                 
             for bullet in self.bullets:
                 bullet.draw()
@@ -234,17 +241,11 @@ class AsteroidsGame(arcade.Window):
                 self.ship.advance()
                 self.ship.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
                 
-                # Update the position of all the Asteroids
-                if not self.asteroids:
-                    
-                    print("YOU WON!")
-                    self.pause = True
-                else:
-                    
-                    for asteroid in self.asteroids:
-                    
-                        asteroid.advance()
-                        asteroid.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
+                # Update the position of all the Asteroids                  
+                for asteroid in self.asteroids:
+                
+                    asteroid.advance()
+                    asteroid.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
                     
                 # Update the position of all the Bullets
                 for bullet in self.bullets:

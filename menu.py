@@ -162,11 +162,7 @@ class Menu:
         # Quit Game
         arcade.close_window()
     
-        
-    def draw_game_over_screen(self):
-        
-        # Draw the Game Over text
-        arcade.draw_text("Game Over", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+    def draw_points(self):
         arcade.draw_text("Press ESC to Show Menu", SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="left")
         arcade.draw_text("Press ENTER to Restart", SCREEN_WIDTH - SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="right")
         
@@ -180,4 +176,14 @@ class Menu:
         # Draw highest score
         arcade.draw_text("Highest Score: " + str(self.game.highest_score), SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4, arcade.color.WHITE, font_size=25, anchor_x="center")
         
+    def draw_game_over_screen(self):
         
+        # Draw the Game Over text
+        arcade.draw_text("Game Over", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        self.draw_points()
+        
+    
+    def draw_win_screen(self):
+        # Draw the Game Over text
+        arcade.draw_text("Mission Acomplished!", SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        self.draw_points()
