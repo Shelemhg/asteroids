@@ -47,7 +47,9 @@ from constants import (
     MEDIUM_EXPLOSION_SOUND_VOLUME,
     SMALL_EXPLOSION_SOUND,
     SMALL_EXPLOSION_SOUND_VOLUME,
-    BULLET_RADIUS
+    BULLET_RADIUS,
+    ENERGY,
+    ENERGY_INCREASE
 )
 
 
@@ -107,6 +109,11 @@ class AsteroidsGame(arcade.Window):
         self.asteroids = []     # List to contain all the Asteroid objects
         self.score = 0     # points counter
         self.highest_score = 0
+        
+        self.energy = ENERGY     # energy for shots
+        self.energy_cost_per_shot = None
+        self.energy_increase = ENERGY_INCREASE
+        
 
         # Initialize Stars
         self.stars = arcade.SpriteList()
@@ -213,14 +220,35 @@ class AsteroidsGame(arcade.Window):
             if not self.ship.alive:
                 self.menu.draw_game_over_screen()
             else:
-                # If the ship is alive, draw current score
-                arcade.draw_text("Points: " + str(self.score), SCREEN_WIDTH - 80, 20, arcade.color.WHITE, font_size=15, anchor_x="center")
+                # Draw current score
+                arcade.draw_text("Points: " + str(self.score), 80, 20, arcade.color.WHITE, font_size=15, anchor_x="center")
+                
+                
+                self.draw_energy_bar(self.energy)
         
         # If the game is paused, draw the menu UI
         else:
             arcade.start_render()
             self.menu.uimanager.draw()
-
+            
+            
+    def draw_energy_bar(self, energy):
+        
+        if energy > (ENERGY * .75):
+            energy_color =  arcade.color.BRIGHT_GREEN
+        elif energy > (ENERGY * .50):
+            energy_color =  arcade.color.CYBER_YELLOW
+        elif energy > (ENERGY * .25):
+            energy_color =  arcade.color.DARK_ORANGE
+        else:
+            energy_color =  arcade.color.ELECTRIC_CRIMSON
+        
+        # Draw energy for shots left
+        arcade.draw_text("Energy: " + str(self.energy) + "%", SCREEN_WIDTH  - ENERGY , 60, energy_color, font_size=15, anchor_x="center")
+                
+        # arcade.draw_rectangle_filled(SCREEN_WIDTH - 50 - ENERGY * 2 + energy , 40, energy*2, 20, energy_color)
+        arcade.draw_rectangle_filled(SCREEN_WIDTH + 50 -  ENERGY - energy , 40, energy*2, 10, energy_color)
+        
 
     def update(self, delta_time):
         """
@@ -283,8 +311,17 @@ class AsteroidsGame(arcade.Window):
                 if (abs(self.ship.position.x - asteroid.position.x) - SHIP_RADIUS < asteroid.radius and
                         abs(self.ship.position.y - asteroid.position.y)  - SHIP_RADIUS < asteroid.radius):
                     
-                    self.ship.velocity = pygame.Vector2(0, 0)
-                    self.ship.alive = False
+                    # If asteroid is a small energy one
+                    if asteroid.size == "Small":
+                        asteroid.alive = False
+                        
+                        self.energy += self.energy_increase
+                        
+                        if self.energy > 100:
+                            self.energy = 100
+                    else:
+                        self.ship.velocity = pygame.Vector2(0, 0)
+                        self.ship.alive = False
                     
 
                 for bullet in self.bullets:
@@ -470,19 +507,29 @@ class AsteroidsGame(arcade.Window):
                 # If ship is alive create a bullet and fire it
                 if self.ship.alive:
                     
-                    bullet = Bullet(self.bullet_radius)
-                    bullet.fire(self.ship.position.x, self.ship.position.y, self.ship.texture_orientation, self.ship.velocity)
-                    self.bullets.append(bullet)
-                    
-                    # Count number of shots for later score calculations
-                    self.ship.shots += 1
-                    
-                    # Substract points per shot
-                    self.score -= self.penalty_per_shot
-                    
-                    # Play laser sound
-                    self.shooting_music_channel.play(pygame.mixer.Sound(SHOOTING_SOUND))       
-                    self.shooting_music_channel.set_volume(SHOOTING_SOUND_VOLUME)
+                    # If there is still energy left
+                    if self.energy > 0:
+                        
+                        # Spend energy
+                        self.energy -= round(self.energy_cost_per_shot)
+                        
+                        # Do not show energy bellow 0
+                        if self.energy < 0:
+                            self.energy = 0
+                        
+                        bullet = Bullet(self.bullet_radius)
+                        bullet.fire(self.ship.position.x, self.ship.position.y, self.ship.texture_orientation, self.ship.velocity)
+                        self.bullets.append(bullet)
+                        
+                        # Count number of shots for later score calculations
+                        self.ship.shots += 1
+                        
+                        # Substract points per shot
+                        self.score -= self.penalty_per_shot
+                        
+                        # Play laser sound
+                        self.shooting_music_channel.play(pygame.mixer.Sound(SHOOTING_SOUND))       
+                        self.shooting_music_channel.set_volume(SHOOTING_SOUND_VOLUME)
                     
             # Hit ENTER to RESET GAME
             #########################
@@ -517,6 +564,7 @@ class AsteroidsGame(arcade.Window):
         self.bullets = []
         self.asteroids = []
         self.score = 0
+        self.energy = ENERGY
         
         # Reset speed of all stars
         for star in self.stars:

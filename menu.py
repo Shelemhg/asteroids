@@ -8,7 +8,9 @@ from constants import (
     SCREEN_HEIGHT,
     INITIAL_ROCK_COUNT,
     PENALTY_PER_SHOT,
-    BULLET_RADIUS
+    BULLET_RADIUS, 
+    ENERGY_COST_PER_SHOT,
+    ENERGY_INCREASE
 )
 
 
@@ -48,24 +50,37 @@ class Menu:
             self.game.penalty_per_shot = PENALTY_PER_SHOT - 30
             # Set the number of large rocks on spawns
             self.game.initial_rock_count = INITIAL_ROCK_COUNT
+            # Set the energy spenditure
+            self.game.energy_cost_per_shot = ENERGY_COST_PER_SHOT *.5
+            # Set the energy increase
+            self.game.energy_increase = ENERGY_INCREASE * 1.5
             
         if self.game.difficulty == "Medium":
              
             # Define a smaller size for the bullets to hit asteroids harder
-            self.game.bullet_radius = BULLET_RADIUS + 1
+            self.game.bullet_radius = BULLET_RADIUS
             # Decrease the cost in points for every shot
             self.game.penalty_per_shot = PENALTY_PER_SHOT  - 10
             # Set the number of large rocks on spawns
             self.game.initial_rock_count = INITIAL_ROCK_COUNT + 3
+            # Set the energy spenditure
+            self.game.energy_cost_per_shot = ENERGY_COST_PER_SHOT
+            # Set the energy increase
+            self.game.energy_increase = ENERGY_INCREASE
+            
             
         if self.game.difficulty == "Hard":
             
             # Define a smaller size for the bullets to hit asteroids harder
-            self.game.bullet_radius = BULLET_RADIUS -2
+            self.game.bullet_radius = BULLET_RADIUS -3
             # Set the cost in points for every shot
             self.game.penalty_per_shot = PENALTY_PER_SHOT
             # Set the number of large rocks on spawns
             self.game.initial_rock_count = INITIAL_ROCK_COUNT + 5
+            # Set the energy spenditure
+            self.game.energy_cost_per_shot = ENERGY_COST_PER_SHOT *1.5
+            # Set the energy increase
+            self.game.energy_increase = ENERGY_INCREASE * .5
             
             
     def show_difficulty_selection_screen(self):
