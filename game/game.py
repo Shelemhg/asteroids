@@ -113,6 +113,7 @@ class AsteroidsGame(arcade.Window):
         self.energy = ENERGY     # energy for shots
         self.energy_cost_per_shot = None
         self.energy_increase = ENERGY_INCREASE
+        self.max_energy = ENERGY
         
 
         # Initialize Stars
@@ -247,7 +248,13 @@ class AsteroidsGame(arcade.Window):
         arcade.draw_text("Energy: " + str(self.energy) + "%", SCREEN_WIDTH  - ENERGY , 60, energy_color, font_size=15, anchor_x="center")
                 
         # arcade.draw_rectangle_filled(SCREEN_WIDTH - 50 - ENERGY * 2 + energy , 40, energy*2, 20, energy_color)
-        arcade.draw_rectangle_filled(SCREEN_WIDTH + 50 -  ENERGY - energy , 40, energy*2, 10, energy_color)
+        
+        # arcade.draw_rectangle_filled(center_x, center_y, width, height, color)
+        arcade.draw_rectangle_filled(SCREEN_WIDTH - 50 -  self.max_energy , 40, self.max_energy*2, 10, arcade.color.SILVER_CHALICE)
+        
+        arcade.draw_rectangle_filled(SCREEN_WIDTH + 50 -  self.max_energy - energy , 40, energy*2, 10, energy_color)
+        
+        
         
 
     def update(self, delta_time):
@@ -317,8 +324,8 @@ class AsteroidsGame(arcade.Window):
                         
                         self.energy += self.energy_increase
                         
-                        if self.energy > 100:
-                            self.energy = 100
+                        if self.energy > self.max_energy:
+                            self.energy = self.max_energy
                     else:
                         self.ship.velocity = pygame.Vector2(0, 0)
                         self.ship.alive = False
