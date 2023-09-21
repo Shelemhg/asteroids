@@ -55,7 +55,7 @@ class Asteroid(FlyingObject):
             # Assign a random movement in both x and y components, either possitive or negative
             self.velocity = pygame.Vector2(round(random.uniform(-BIG_ROCK_SPEED, BIG_ROCK_SPEED), 2), round(random.uniform(-BIG_ROCK_SPEED, BIG_ROCK_SPEED), 2))
             
-            # Define the speed of the spin of the asteroid
+            # Declares the speed of the spin of the asteroid
             self.angular_velocity = BIG_ROCK_SPIN
             
             # Declares the radius of the asteroid to calculate impact distance to bullets and ship
@@ -66,7 +66,7 @@ class Asteroid(FlyingObject):
             # Load the asteroid's texture
             self.texture = arcade.load_texture(MEDIUM_ROCK_TEXTURE)
             
-            # Define the speed of the spin of the asteroid
+            # Declares the speed of the spin of the asteroid
             self.angular_velocity = MEDIUM_ROCK_SPIN
             
             # Obtain the X and Y components from the "direction" angle
@@ -84,7 +84,7 @@ class Asteroid(FlyingObject):
             # Load the asteroid's texture
             self.texture = arcade.load_texture(SMALL_ROCK_TEXTURE)
             
-            # Define the speed of the spin of the asteroid
+            # Declares the speed of the spin of the asteroid
             self.angular_velocity = SMALL_ROCK_SPIN
             
             # Obtain the X and Y components from the "direction" angle
@@ -97,7 +97,7 @@ class Asteroid(FlyingObject):
             # Declares the radius of the asteroid to calculate impact distance to bullets and ship
             self.radius = SMALL_ROCK_RADIUS
             
-        # Defines the width and height value from the same values of the texture
+        # Declares the width and height value from the same values of the texture
         self.width = self.texture.width
         self.height = self.texture.height
         
@@ -120,10 +120,10 @@ class Asteroid(FlyingObject):
 
     def advance(self):
         
-        # MOVE the asteroid based on its velocity
+        # Move the asteroid object based on its velocity
         self.position += round(self.velocity, 2)
         
-        # ROTATE either clockwise or counter clockwise, at its angular velocity
+        # Rotate either clockwise or counter clockwise, at its angular velocity
         if self.rotation_direction == 0:
             self.texture_orientation += round(self.angular_velocity, 2)
         else:
