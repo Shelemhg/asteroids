@@ -48,7 +48,7 @@ BULLET_COLOR = arcade.color.BRIGHT_GREEN
 ###########################
 #    A S T E R O I D S    #
 ###########################
-INITIAL_ROCK_COUNT = 5
+INITIAL_ROCK_COUNT = 1
 
 BIG_ROCK_TEXTURE = "assets/images/meteorGrey_big1.png"
 BIG_ROCK_SPEED = .5

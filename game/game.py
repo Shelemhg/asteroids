@@ -223,35 +223,44 @@ class AsteroidsGame(arcade.Window):
         Args:
             delta_time (float): The time elapsed since the last update.
         """
-        # If the ship is still alive (hasn't been hit) then keep updating all the objects positions
-        if self.ship.alive:
-
-            self.check_keys(delta_time)
-            self.check_collisions(delta_time)
-            self.ship.advance()
-            self.ship.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
+        # If game is not paused
+        if self.pause is False:
             
-            # Update the position of all the Asteroids
-            for asteroid in self.asteroids:
-                
-                asteroid.advance()
-                asteroid.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
-                
-            # Update the position of all the Bullets
-            for bullet in self.bullets:
+            # If the ship is still alive (hasn't been hit) then keep updating all the objects positions
+            if self.ship.alive:
 
-                bullet.advance()
-                bullet.bullet_is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
-
-            # Update the position of the far_stars
-            
-            for star in self.stars:
-                star.advance()
-                star.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)   
+                self.check_keys(delta_time)
+                self.check_collisions(delta_time)
+                self.ship.advance()
+                self.ship.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
                 
-            for galaxy in self.galaxies:
-                galaxy.advance()
-                galaxy.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)               
+                # Update the position of all the Asteroids
+                if not self.asteroids:
+                    
+                    print("YOU WON!")
+                    self.pause = True
+                else:
+                    
+                    for asteroid in self.asteroids:
+                    
+                        asteroid.advance()
+                        asteroid.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
+                    
+                # Update the position of all the Bullets
+                for bullet in self.bullets:
+
+                    bullet.advance()
+                    bullet.bullet_is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)
+
+                # Update the position of the far_stars
+                
+                for star in self.stars:
+                    star.advance()
+                    star.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)   
+                    
+                for galaxy in self.galaxies:
+                    galaxy.advance()
+                    galaxy.is_off_screen(SCREEN_WIDTH, SCREEN_HEIGHT)               
       
 
     def check_collisions(self, delta_time):
@@ -264,62 +273,65 @@ class AsteroidsGame(arcade.Window):
             delta_time (float): The time elapsed since the last update.
 
         """
-        for asteroid in self.asteroids:
+        # If game is not paused
+        if self.pause is False:
             
-            # Check if the ship is too close from an asteroid, if so, stop the game and kill the spaceship.
-            if (abs(self.ship.position.x - asteroid.position.x) - SHIP_RADIUS < asteroid.radius and
-                    abs(self.ship.position.y - asteroid.position.y)  - SHIP_RADIUS < asteroid.radius):
+            for asteroid in self.asteroids:
                 
-                self.ship.velocity = pygame.Vector2(0, 0)
-                self.ship.alive = False
-                
+                # Check if the ship is too close from an asteroid, if so, stop the game and kill the spaceship.
+                if (abs(self.ship.position.x - asteroid.position.x) - SHIP_RADIUS < asteroid.radius and
+                        abs(self.ship.position.y - asteroid.position.y)  - SHIP_RADIUS < asteroid.radius):
+                    
+                    self.ship.velocity = pygame.Vector2(0, 0)
+                    self.ship.alive = False
+                    
 
-            for bullet in self.bullets:
-                # Make sure they are both alive before checking for a collision
-                if bullet.alive and asteroid.alive:
+                for bullet in self.bullets:
+                    # Make sure they are both alive before checking for a collision
+                    if bullet.alive and asteroid.alive:
 
-                    too_close = asteroid.radius + bullet.radius
-                    # If the position in X is greater than too_close then kill both the bullet and the asteroid
-                    if (abs(bullet.position.x - asteroid.position.x) < too_close and
-                            abs(bullet.position.y - asteroid.position.y) < too_close):
-                        
-                        bullet.alive = False
-                        asteroid.alive = False
-                        
-                         # Split of big asteroids into smaller ones upon impact of bullet
-                        if asteroid.size == "Big":
+                        too_close = asteroid.radius + bullet.radius
+                        # If the position in X is greater than too_close then kill both the bullet and the asteroid
+                        if (abs(bullet.position.x - asteroid.position.x) < too_close and
+                                abs(bullet.position.y - asteroid.position.y) < too_close):
                             
-                            self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.direction + 45))
-                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction))
-                            self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.direction - 45))
-                            # Add corresponding points
-                            self.score += LARGE_ROCK_POINTS
+                            bullet.alive = False
+                            asteroid.alive = False
                             
-                            # Play explosion sound
-                            self.channel3.play(pygame.mixer.Sound(EXPLOSION_SOUND))          
-                            self.channel3.set_volume(EXPLOSION_SOUND_VOLUME)
+                            # Split of big asteroids into smaller ones upon impact of bullet
+                            if asteroid.size == "Big":
+                                
+                                self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.direction + 45))
+                                self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction))
+                                self.asteroids.append(Asteroid("Medium", asteroid.position.x, asteroid.position.y, bullet.direction - 45))
+                                # Add corresponding points
+                                self.score += LARGE_ROCK_POINTS
+                                
+                                # Play explosion sound
+                                self.channel3.play(pygame.mixer.Sound(EXPLOSION_SOUND))          
+                                self.channel3.set_volume(EXPLOSION_SOUND_VOLUME)
 
-                        elif asteroid.size == "Medium":
+                            elif asteroid.size == "Medium":
 
-                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction + 45))
-                            self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction - 45))
+                                self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction + 45))
+                                self.asteroids.append(Asteroid("Small", asteroid.position.x, asteroid.position.y, bullet.direction - 45))
+                                
+                                # Add corresponding points
+                                self.score += MEDIUM_ROCK_POINTS
+                                
+                                # Play explosion sound
+                                self.channel4.play(pygame.mixer.Sound(MEDIUM_EXPLOSION_SOUND))          
+                                self.channel4.set_volume(MEDIUM_EXPLOSION_SOUND_VOLUME)
                             
-                            # Add corresponding points
-                            self.score += MEDIUM_ROCK_POINTS
-                            
-                            # Play explosion sound
-                            self.channel4.play(pygame.mixer.Sound(MEDIUM_EXPLOSION_SOUND))          
-                            self.channel4.set_volume(MEDIUM_EXPLOSION_SOUND_VOLUME)
-                        
-                        else:
-                            self.score += SMALL_ROCK_POINTS
-                            
-                            # Play explosion sound
-                            self.channel5.play(pygame.mixer.Sound(SMALL_EXPLOSION_SOUND))          
-                            self.channel5.set_volume(SMALL_EXPLOSION_SOUND_VOLUME)
-                            
-                            
-        self.cleanup_dead_objects()
+                            else:
+                                self.score += SMALL_ROCK_POINTS
+                                
+                                # Play explosion sound
+                                self.channel5.play(pygame.mixer.Sound(SMALL_EXPLOSION_SOUND))          
+                                self.channel5.set_volume(SMALL_EXPLOSION_SOUND_VOLUME)
+                                
+                                
+            self.cleanup_dead_objects()
 
 
     def cleanup_dead_objects(self):
@@ -345,91 +357,94 @@ class AsteroidsGame(arcade.Window):
         Args:
             delta_time (float): The time elapsed since the last update.
         """
-        #   U P    K E Y
-        if arcade.key.UP in self.held_keys:
+        # If game is not paused
+        if self.pause is False:
             
-            # Calculate the magnitude of each component (x and y) from its current angle
-            ship_dx = math.cos(math.radians(self.ship.texture_orientation))
-            ship_dy = math.sin(math.radians(self.ship.texture_orientation))
-            
-            # Accelerate!!
-            # Increase the ships velocity vector according to its current orientation and Thust
-            self.ship.velocity -= pygame.Vector2(round(ship_dx * SHIP_THRUST_AMOUNT, 2), round(ship_dy * SHIP_THRUST_AMOUNT, 2))
-            
-            for asteroid in self.asteroids:
-                asteroid.velocity += pygame.Vector2(ship_dx * SHIP_THRUST_AMOUNT, ship_dy * SHIP_THRUST_AMOUNT)
-
-            # Update movement of stars
-            for star in self.stars:
-                star.velocity = -self.ship.velocity * star.speed
-            
-            for galaxy in self.galaxies:
-                galaxy.velocity = -self.ship.velocity * galaxy.speed
+            #   U P    K E Y
+            if arcade.key.UP in self.held_keys:
                 
-            # Switch randomly the regular and the action texture
-            if random.randint(0, 1) == 0:
-                self.ship.texture = self.thrust_texture
-            else:
-                self.ship.texture = self.ship_texture
+                # Calculate the magnitude of each component (x and y) from its current angle
+                ship_dx = math.cos(math.radians(self.ship.texture_orientation))
+                ship_dy = math.sin(math.radians(self.ship.texture_orientation))
                 
+                # Accelerate!!
+                # Increase the ships velocity vector according to its current orientation and Thust
+                self.ship.velocity -= pygame.Vector2(round(ship_dx * SHIP_THRUST_AMOUNT, 2), round(ship_dy * SHIP_THRUST_AMOUNT, 2))
                 
-            # Play Sound if the main engine music channel is not busy (not playing)
-            if not self.main_engine_music_channel.get_busy():
+                for asteroid in self.asteroids:
+                    asteroid.velocity += pygame.Vector2(ship_dx * SHIP_THRUST_AMOUNT, ship_dy * SHIP_THRUST_AMOUNT)
+
+                # Update movement of stars
+                for star in self.stars:
+                    star.velocity = -self.ship.velocity * star.speed
                 
-                self.main_engine_music_channel.play(pygame.mixer.Sound(MAIN_ENGINE_SOUND))
-                self.main_engine_music_channel.set_volume(MAIN_ENGINE_SOUND_VOLUME)
+                for galaxy in self.galaxies:
+                    galaxy.velocity = -self.ship.velocity * galaxy.speed
+                    
+                # Switch randomly the regular and the action texture
+                if random.randint(0, 1) == 0:
+                    self.ship.texture = self.thrust_texture
+                else:
+                    self.ship.texture = self.ship_texture
+                    
+                    
+                # Play Sound if the main engine music channel is not busy (not playing)
+                if not self.main_engine_music_channel.get_busy():
+                    
+                    self.main_engine_music_channel.play(pygame.mixer.Sound(MAIN_ENGINE_SOUND))
+                    self.main_engine_music_channel.set_volume(MAIN_ENGINE_SOUND_VOLUME)
+                    
+            #    D O W N    K E Y
+            #########################
+            if arcade.key.DOWN in self.held_keys:
                 
-        #    D O W N    K E Y
-        #########################
-        if arcade.key.DOWN in self.held_keys:
-            
-            # Calculate the magnitude of each component (x and y) from its current angle
-            ship_dx = math.cos(math.radians(self.ship.texture_orientation))
-            ship_dy = math.sin(math.radians(self.ship.texture_orientation))
-            
-            # Reverse!
-            # Increase the ships velocity vector according to its corresponding component (x or y) and Thust            
-            self.ship.velocity += pygame.Vector2(round(ship_dx * SHIP_RETRO_THRUST_AMOUNT, 2), round(ship_dy * SHIP_RETRO_THRUST_AMOUNT, 2))
-            
-            for asteroid in self.asteroids:
-                asteroid.velocity -= pygame.Vector2(round(ship_dx * SHIP_RETRO_THRUST_AMOUNT, 2), round(ship_dy * SHIP_RETRO_THRUST_AMOUNT, 2))
-
-            # Calculate the movement of stars oposite to the ship one, in order to create the paralax effect
-            for star in self.stars:
-                star.velocity = -self.ship.velocity * star.speed
+                # Calculate the magnitude of each component (x and y) from its current angle
+                ship_dx = math.cos(math.radians(self.ship.texture_orientation))
+                ship_dy = math.sin(math.radians(self.ship.texture_orientation))
                 
-            for galaxy in self.galaxies:
-                galaxy.velocity = -self.ship.velocity * galaxy.speed
+                # Reverse!
+                # Increase the ships velocity vector according to its corresponding component (x or y) and Thust            
+                self.ship.velocity += pygame.Vector2(round(ship_dx * SHIP_RETRO_THRUST_AMOUNT, 2), round(ship_dy * SHIP_RETRO_THRUST_AMOUNT, 2))
+                
+                for asteroid in self.asteroids:
+                    asteroid.velocity -= pygame.Vector2(round(ship_dx * SHIP_RETRO_THRUST_AMOUNT, 2), round(ship_dy * SHIP_RETRO_THRUST_AMOUNT, 2))
 
-            # Switch randomly the regular and the action texture
-            if random.randint(0, 1) == 0:
-                self.ship.texture = self.reverse_texture
-            else:
-                self.ship.texture = self.ship_texture
+                # Calculate the movement of stars oposite to the ship one, in order to create the paralax effect
+                for star in self.stars:
+                    star.velocity = -self.ship.velocity * star.speed
+                    
+                for galaxy in self.galaxies:
+                    galaxy.velocity = -self.ship.velocity * galaxy.speed
 
-        #    L E F T    K E Y
-        #########################
-        if arcade.key.LEFT in self.held_keys:
-            
-            self.ship.angular_velocity += SHIP_TURN_AMOUNT
+                # Switch randomly the regular and the action texture
+                if random.randint(0, 1) == 0:
+                    self.ship.texture = self.reverse_texture
+                else:
+                    self.ship.texture = self.ship_texture
 
-            # Switch randomly the regular and the action texture
-            if random.randint(0, 1) == 0:
-                self.ship.texture = self.left_turn_texture
-            else:
-                self.ship.texture = self.ship_texture
+            #    L E F T    K E Y
+            #########################
+            if arcade.key.LEFT in self.held_keys:
+                
+                self.ship.angular_velocity += SHIP_TURN_AMOUNT
 
-        #    R I G H T    K E Y
-        #########################
-        if arcade.key.RIGHT in self.held_keys:
-            
-            self.ship.angular_velocity -= SHIP_TURN_AMOUNT
+                # Switch randomly the regular and the action texture
+                if random.randint(0, 1) == 0:
+                    self.ship.texture = self.left_turn_texture
+                else:
+                    self.ship.texture = self.ship_texture
 
-            # Switch randomly the regular and the action texture
-            if random.randint(0, 1) == 0:
-                self.ship.texture = self.right_turn_texture
-            else:
-                self.ship.texture = self.ship_texture
+            #    R I G H T    K E Y
+            #########################
+            if arcade.key.RIGHT in self.held_keys:
+                
+                self.ship.angular_velocity -= SHIP_TURN_AMOUNT
+
+                # Switch randomly the regular and the action texture
+                if random.randint(0, 1) == 0:
+                    self.ship.texture = self.right_turn_texture
+                else:
+                    self.ship.texture = self.ship_texture
 
 
     def on_key_press(self, key, delta_time):
@@ -442,44 +457,47 @@ class AsteroidsGame(arcade.Window):
             key ()
             delta_time (float): The time elapsed since the last update.
         """
-        self.held_keys.add(key)
-        
-        # Hit SPACE to shoot a bullet
-        #########################
-        if key == arcade.key.SPACE:
+        # If game is not paused, render all the objects: stars, ship, asteroids, bullets
+        if self.pause is False:
             
-            # If ship is alive create a bullet and fire it
-            if self.ship.alive:
+            self.held_keys.add(key)
+            
+            # Hit SPACE to shoot a bullet
+            #########################
+            if key == arcade.key.SPACE:
                 
-                bullet = Bullet(self.bullet_radius)
-                bullet.fire(self.ship.position.x, self.ship.position.y, self.ship.texture_orientation, self.ship.velocity)
-                self.bullets.append(bullet)
-                
-                # Count number of shots for later score calculations
-                self.ship.shots += 1
-                
-                # Substract points per shot
-                self.score -= self.penalty_per_shot
-                
-                # Play laser sound
-                self.shooting_music_channel.play(pygame.mixer.Sound(SHOOTING_SOUND))       
-                self.shooting_music_channel.set_volume(SHOOTING_SOUND_VOLUME)
-                
-        # Hit ENTER to RESET GAME
-        #########################
-        if key == arcade.key.ENTER:
+                # If ship is alive create a bullet and fire it
+                if self.ship.alive:
+                    
+                    bullet = Bullet(self.bullet_radius)
+                    bullet.fire(self.ship.position.x, self.ship.position.y, self.ship.texture_orientation, self.ship.velocity)
+                    self.bullets.append(bullet)
+                    
+                    # Count number of shots for later score calculations
+                    self.ship.shots += 1
+                    
+                    # Substract points per shot
+                    self.score -= self.penalty_per_shot
+                    
+                    # Play laser sound
+                    self.shooting_music_channel.play(pygame.mixer.Sound(SHOOTING_SOUND))       
+                    self.shooting_music_channel.set_volume(SHOOTING_SOUND_VOLUME)
+                    
+            # Hit ENTER to RESET GAME
+            #########################
+            if key == arcade.key.ENTER:
 
-            self.reset_objects()
-                
-        # Hit ESCAPE to quit the game
-        #########################
-        if key == arcade.key.ESCAPE:
-            # Quit Game
-            # arcade.close_window()
-            self.pause = True
-            self.menu.show_difficulty_selection_screen()
-            # window = MainMenu(SCREEN_WIDTH, SCREEN_HEIGHT, "Menu")
-            # arcade.run()
+                self.reset_objects()
+                    
+            # Hit ESCAPE to quit the game
+            #########################
+            if key == arcade.key.ESCAPE:
+                # Quit Game
+                # arcade.close_window()
+                self.pause = True
+                self.menu.show_difficulty_selection_screen()
+                # window = MainMenu(SCREEN_WIDTH, SCREEN_HEIGHT, "Menu")
+                # arcade.run()
 
     
     def reset_objects(self):
