@@ -43,7 +43,7 @@ class Asteroid(FlyingObject):
         self.position.x = x      # Define initial position in X of the asteroid
         self.position.y = y      # Define initial position in Y of the asteroid
         
-        self.texture_orientation = direction      # Angle of the asteroid's texture on spawn (pointing upwards)
+        self.texture_orientation = direction      # Angle of the asteroid's texture on spawn
         self.rotation_direction = random.randint(0, 1)  # Assign a random rotation direction
 
 
