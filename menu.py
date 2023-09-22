@@ -89,9 +89,10 @@ class Menu:
         self.uimanager = arcade.gui.UIManager()
         self.uimanager.enable()
         
+        # By default, add a border line in color black to all buttons
         border_color_easy = border_color_medium = border_color_hard = arcade.color.BLACK
         
-        
+        # Change the border color of the selected difficulty
         if self.game.difficulty == "Easy":
             border_color_easy = arcade.color.SILVER 
             
