@@ -18,7 +18,7 @@ My version of the classic Asteroids game created using Python and the Arcade and
 
 
 ## Introduction
-This project is my version of the classic Asteroids game in Python. It offers an engaging gaming experience where players control a spaceship to navigate through space, shoot asteroids, and collect energy to survive. The game includes features such as sound effects, a scoring system, and a dynamic starry background.
+My version of the classic Asteroids game in Python. It offers an engaging gaming experience where players control a spaceship to navigate through space, shoot asteroids, and collect energy to survive. The game includes features such as sound effects, a scoring system, and a dynamic starry background.
 
 
 ## Features
