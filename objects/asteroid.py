@@ -32,16 +32,16 @@ class Asteroid(FlyingObject):
         Creates an asteroid object
         
         Args:
-            size (string): Size of the asteroid to create
+            size (string): Size of the asteroid to create: "Small", "Medium" or "Big"
             x, y (float): X and Y values for the spawn position of the asteroid
-            direction (float): Angle of the bullet that impacted the asteroid or 0
+            direction (float): Angle of the bullet that impacted the asteroid.
         """
         
         super().__init__()
         self.size = size      # Size of the asteroid "Big", "Medium" or "Small"
         
-        self.position.x = x      # Position in X of the ship on spawn
-        self.position.y = y      # Position in Y of the ship on spawn
+        self.position.x = x      # Define initial position in X of the asteroid
+        self.position.y = y      # Define initial position in Y of the asteroid
         
         self.texture_orientation = direction      # Angle of the asteroid's texture on spawn (pointing upwards)
         self.rotation_direction = random.randint(0, 1)  # Assign a random rotation direction
