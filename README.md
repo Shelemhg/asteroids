@@ -108,7 +108,9 @@ The game features immersive sound effects, including:
 
 
 ## Contributing
-Contributions to this project are welcome. Feel free to open issues or submit pull requests for bug fixes, improvements, or new features.
+- Contributions to this project are welcome. Feel free to open issues or submit pull requests for bug fixes, improvements, or new features.
+- The original code was a simple base project by: Br. Burton "Designed to be completed by others" and it had 126 lines of code, and it only showed a black window.
+Currently, this code contains more than 600 lines on its main game file. Not counting any of the other 7 class files, for an approximate 1100 lines in total, with 791 lines of pure code and 366 lines of useful documentation.
 
 
 ## License
