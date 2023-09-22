@@ -89,6 +89,18 @@ class Menu:
         self.uimanager = arcade.gui.UIManager()
         self.uimanager.enable()
         
+        border_color_easy = border_color_medium = border_color_hard = arcade.color.BLACK
+        
+        
+        if self.game.difficulty == "Easy":
+            border_color_easy = arcade.color.SILVER 
+            
+        elif self.game.difficulty == "Medium":
+            border_color_medium = arcade.color.SILVER
+            
+        elif self.game.difficulty == "Hard":
+            border_color_hard = arcade.color.SILVER
+        
         arcade.set_background_color(arcade.color.ARSENIC)
             
         # Create the buttons
@@ -99,7 +111,7 @@ class Menu:
                             "bg_color": arcade.color.AO,  # Background color
                             "hover_bg_color": arcade.color.GREEN,  # Background color on hover
                             "font_color": arcade.color.WHITE,  # Text color
-                            "border_color": arcade.color.BLACK,  # Border color
+                            "border_color": border_color_easy,  # Border color
                             "border_width": 4,  # Border width
                             "font_size": 20,  # Text font size
                         }
@@ -111,7 +123,7 @@ class Menu:
                             "bg_color": arcade.color.AMBER,  # Background color
                             "hover_bg_color": arcade.color.GREEN,  # Background color on hover
                             "font_color": arcade.color.WHITE,  # Text color
-                            "border_color": arcade.color.BLACK,  # Border color
+                            "border_color": border_color_medium,  # Border color
                             "border_width": 4,  # Border width
                             "font_size": 20,  # Text font size
                         }
@@ -123,7 +135,7 @@ class Menu:
                             "bg_color": arcade.color.SAE,  # Background color
                             "hover_bg_color": arcade.color.GREEN,  # Background color on hover
                             "font_color": arcade.color.WHITE,  # Text color
-                            "border_color": arcade.color.BLACK,  # Border color
+                            "border_color": border_color_hard,  # Border color
                             "border_width": 4,  # Border width
                             "font_size": 20,  # Text font size
                         }
@@ -178,8 +190,8 @@ class Menu:
         arcade.close_window()
     
     def draw_points(self):
-        arcade.draw_text("Press ESC to Show Menu", SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="left")
-        arcade.draw_text("Press ENTER to Restart", SCREEN_WIDTH - SCREEN_WIDTH // 8, 40, arcade.color.WHITE, font_size=20, anchor_x="right")
+        arcade.draw_text("Press ESC to Show Menu", SCREEN_WIDTH // 8, 100, arcade.color.WHITE, font_size=20, anchor_x="left")
+        arcade.draw_text("Press ENTER to Restart", SCREEN_WIDTH - SCREEN_WIDTH // 8, 100, arcade.color.WHITE, font_size=20, anchor_x="right")
         
         # Draw final score
         arcade.draw_text("FINAL SCORE: " + str(self.game.score), SCREEN_WIDTH // 2, SCREEN_HEIGHT // 3, arcade.color.GREEN, font_size=25, anchor_x="center")

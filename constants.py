@@ -51,7 +51,7 @@ ENERGY_INCREASE = 15
 ###########################
 #    A S T E R O I D S    #
 ###########################
-INITIAL_ROCK_COUNT = 1
+INITIAL_ROCK_COUNT = 5
 
 BIG_ROCK_TEXTURE = "assets/images/meteorGrey_big1.png"
 BIG_ROCK_SPEED = .5

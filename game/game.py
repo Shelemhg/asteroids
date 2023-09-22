@@ -530,10 +530,7 @@ class AsteroidsGame(arcade.Window):
                         
                         # Count number of shots for later score calculations
                         self.ship.shots += 1
-                        
-                        # Substract points per shot
-                        self.score -= self.penalty_per_shot
-                        
+                                                
                         # Play laser sound
                         self.shooting_music_channel.play(pygame.mixer.Sound(SHOOTING_SOUND))       
                         self.shooting_music_channel.set_volume(SHOOTING_SOUND_VOLUME)
