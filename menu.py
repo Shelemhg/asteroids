@@ -28,7 +28,7 @@ class Menu:
         self.uimanager.enable()
 
 
-    def unpause(self, difficulty):
+    def resume(self, difficulty):
         
         # Switch the state of the game to unpaused
         self.game.pause = False
@@ -82,8 +82,10 @@ class Menu:
             # Set the energy increase
             self.game.energy_increase = ENERGY_INCREASE * .5
             
+        self.game.set_caption("Asteroids")
             
-    def show_difficulty_selection_screen(self):
+            
+    def show_menu_screen(self):
         
         # Instanciate objects for the creation of the UI
         self.uimanager = arcade.gui.UIManager()
@@ -110,7 +112,7 @@ class Menu:
                         width=200,
                         style={
                             "bg_color": arcade.color.AO,  # Background color
-                            "hover_bg_color": arcade.color.GREEN,  # Background color on hover
+                            "hover_bg_color": arcade.color.NAPIER_GREEN,  # Background color on hover
                             "font_color": arcade.color.WHITE,  # Text color
                             "border_color": border_color_easy,  # Border color
                             "border_width": 4,  # Border width
@@ -121,7 +123,7 @@ class Menu:
                         text="Medium",
                         width=200,
                         style={
-                            "bg_color": arcade.color.AMBER,  # Background color
+                            "bg_color": arcade.color.DEEP_LEMON,  # Background color
                             "hover_bg_color": arcade.color.GREEN,  # Background color on hover
                             "font_color": arcade.color.WHITE,  # Text color
                             "border_color": border_color_medium,  # Border color
@@ -133,7 +135,7 @@ class Menu:
                         text="Hard",
                         width=200,
                         style={
-                            "bg_color": arcade.color.SAE,  # Background color
+                            "bg_color": arcade.color.DARK_ORANGE,  # Background color
                             "hover_bg_color": arcade.color.GREEN,  # Background color on hover
                             "font_color": arcade.color.WHITE,  # Text color
                             "border_color": border_color_hard,  # Border color
@@ -163,9 +165,11 @@ class Menu:
         # Create a UIBoxLayout and add the buttons to it
         button_box = arcade.gui.UIBoxLayout(vertical=True, space_between=20)
         
+        # If there is a selected difficulty, it would mean the game has already started, then show resume button
         if self.game.difficulty != None:
+
             resume_button = arcade.gui.UIFlatButton(text="Resume", width=200)            
-            resume_button.on_click = lambda event: self.unpause(self.game.difficulty)
+            resume_button.on_click = lambda event: self.resume(self.game.difficulty)
             button_box.add(resume_button)
         
         
@@ -175,6 +179,17 @@ class Menu:
         button_box.add(hard_button)
         button_box.add(quit_button)
 
+        asteroids_label = arcade.gui.UILabel(
+            text="Asteroids",
+            font_size=100,
+            font_name="Kenney Mini Square",
+            align="center",
+            anchor_x="left",
+            anchor_y="center",
+            width=SCREEN_WIDTH,
+            height=SCREEN_HEIGHT * 1.7,  # Adjust the height as needed
+        )
+        self.uimanager.add(asteroids_label)
         # Add the button box to the UI manager using UIAnchorWidget
         self.uimanager.add(
             arcade.gui.UIAnchorWidget(
@@ -190,7 +205,9 @@ class Menu:
         # Quit Game
         arcade.close_window()
     
+    
     def draw_points(self):
+        
         arcade.draw_text("Press ESC to Show Menu", SCREEN_WIDTH // 8, 100, arcade.color.WHITE, font_size=20, anchor_x="left")
         arcade.draw_text("Press ENTER to Restart", SCREEN_WIDTH - SCREEN_WIDTH // 8, 100, arcade.color.WHITE, font_size=20, anchor_x="right")
         
@@ -203,6 +220,7 @@ class Menu:
             
         # Draw highest score
         arcade.draw_text("Highest Score: " + str(self.game.highest_score), SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4, arcade.color.WHITE, font_size=25, anchor_x="center")
+        
         
     def draw_game_over_screen(self):
         

@@ -1,4 +1,8 @@
 # game/game.py
+"""
+My version of the classic Asteroids game
+Copyright: shelemhg 2023
+"""
 
 import arcade
 import math
@@ -26,32 +30,34 @@ from constants import (
     SHIP_TEXTURE_LEFT_TURN,
     SHIP_TEXTURE_RIGHT_TURN,
     SHIP_RADIUS,
+    ENERGY_SOUND,
+    ENERGY_SOUND_VOLUME,    
+    LARGE_ROCK_POINTS,
+    ENERGY,
+    ENERGY_INCREASE,    
+    MEDIUM_ROCK_POINTS,
     INITIAL_ROCK_COUNT,
     NUMBER_OF_BACKGROUND_STARS,
     NUMBER_OF_STARS_1,
     NUMBER_OF_STARS_2,
     NUMBER_OF_GALAXIES,
-    LARGE_ROCK_POINTS,
-    MEDIUM_ROCK_POINTS,
     SMALL_ROCK_POINTS,
     PENALTY_PER_SHOT,
     MAIN_ENGINE_SOUND,
     MAIN_ENGINE_SOUND_VOLUME,
+    BACKGROUND_MUSIC,
+    BACKGROUND_MUSIC_VOLUME,    
     SHOOTING_SOUND,
     SHOOTING_SOUND_VOLUME,
-    BACKGROUND_MUSIC,
-    BACKGROUND_MUSIC_VOLUME,
     EXPLOSION_SOUND,
     EXPLOSION_SOUND_VOLUME,
     MEDIUM_EXPLOSION_SOUND,
     MEDIUM_EXPLOSION_SOUND_VOLUME,
     SMALL_EXPLOSION_SOUND,
     SMALL_EXPLOSION_SOUND_VOLUME,
-    ENERGY_SOUND,
-    ENERGY_SOUND_VOLUME,
+
     BULLET_RADIUS,
-    ENERGY,
-    ENERGY_INCREASE
+
 )
 
 
@@ -59,14 +65,13 @@ class AsteroidsGame(arcade.Window):
     """
     Main game class for the Asteroids game.
 
-    Attributes:
-        held_keys (set): Store held keys.
+    Attributes:    
         ship (Ship): The player's spaceship.
+        held_keys (set): Store held keys.
         bullets (list): Store active bullets.
         asteroids (list): Store active asteroids.
         stars (arcade.SpriteList): Store stars.
         background_stars (arcade.SpriteList): Store background stars.
-        frame_count (int): Track frames.
     """
     
     def __init__(self, width, height, screen_title, difficulty):
@@ -95,7 +100,7 @@ class AsteroidsGame(arcade.Window):
         self.menu = Menu(self)
         
         # Show the difficulty selection screen
-        self.menu.show_difficulty_selection_screen()
+        self.menu.show_menu_screen()
         
         # Load all different textures and get them ready for later use
         self.ship_texture = arcade.load_texture(SHIP_TEXTURE)
@@ -104,18 +109,20 @@ class AsteroidsGame(arcade.Window):
         self.left_turn_texture = arcade.load_texture(SHIP_TEXTURE_LEFT_TURN)
         self.right_turn_texture = arcade.load_texture(SHIP_TEXTURE_RIGHT_TURN)
         
-        # Initialize objects
-        self.held_keys = set()
+        # Initialize objects        
         self.ship = Ship()
+        self.held_keys = set()
         self.bullets = []     # List to contain all the Bullet objects
         self.asteroids = []     # List to contain all the Asteroid objects
-        self.score = 0     # points counter
-        self.highest_score = 0
         
+        self.score = 0     # points counter
+        self.highest_score = 0        
         self.energy = ENERGY     # energy for shots
+        self.level = None
         self.energy_cost_per_shot = None
-        self.energy_increase = ENERGY_INCREASE
         self.max_energy = ENERGY
+               
+        self.energy_increase = ENERGY_INCREASE
         
 
         # Initialize Stars
@@ -155,13 +162,13 @@ class AsteroidsGame(arcade.Window):
           
     def generate_stars(self, stars_list, num_stars, type):
         """
-        Receives a list for storage, the number and type of stars to save in it. Then it
-        generates a random location on screen for each star and then it adds it to the list of stars.
+        Receives a list for storage, the number and type of stars to save in it. Then it generates a random location on screen for each star and then it adds it to the list of stars.
 
         Args:
+            s h e l e m h g 2023
             stars_list (List[Star]): The list of stars to draw.
             num_stars (int): Number of stars to generate
-            type (int): Type of stars to generate: Background = 0, Layer1 = 1, Layer2 = 2
+            type (int): Type of stars to generate: Background = 0, Layer1 = 1, Layer2 = 2      
         """
         for _ in range(num_stars):
             x = random.randint(0, SCREEN_WIDTH)
@@ -172,8 +179,7 @@ class AsteroidsGame(arcade.Window):
 
     def generate_galaxies(self, galaxies_list, num_galaxies):
         """
-        Receives a list for storage and the number of galaxies to save in it. Then it
-        generates a random location on screen for each galaxy and then it adds it to the list of galaxies.
+        Receives a list for storage and the number of galaxies to save in it. Then it generates a random location on screen for each galaxy and then it adds it to the list of galaxies.
         
         Args:
             stars_list (List[Star]): The list of stars to draw.
@@ -247,12 +253,9 @@ class AsteroidsGame(arcade.Window):
         else:
             energy_color =  arcade.color.ELECTRIC_CRIMSON
         
-        # Draw energy for shots left
-        arcade.draw_text("Energy: " + str(self.energy) + "%", SCREEN_WIDTH  - ENERGY , 60, energy_color, font_size=15, anchor_x="center")
-                
-        # arcade.draw_rectangle_filled(SCREEN_WIDTH - 50 - ENERGY * 2 + energy , 40, energy*2, 20, energy_color)
-        
-        # arcade.draw_rectangle_filled(center_x, center_y, width, height, color)
+        # Draw energy left on screen
+        arcade.draw_text("Energy: " + str(round(self.energy)) + "%", SCREEN_WIDTH  - ENERGY , 60, energy_color, font_size=15, anchor_x="center")
+
         arcade.draw_rectangle_filled(SCREEN_WIDTH - 50 -  self.max_energy , 40, self.max_energy*2, 10, arcade.color.SILVER_CHALICE)
         
         arcade.draw_rectangle_filled(SCREEN_WIDTH + 50 -  self.max_energy - energy , 40, energy*2, 10, energy_color)
@@ -560,7 +563,7 @@ class AsteroidsGame(arcade.Window):
                 # Quit Game
                 # arcade.close_window()
                 self.pause = True
-                self.menu.show_difficulty_selection_screen()
+                self.menu.show_menu_screen()
                 # window = MainMenu(SCREEN_WIDTH, SCREEN_HEIGHT, "Menu")
                 # arcade.run()
 

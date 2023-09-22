@@ -131,7 +131,7 @@ BACKGROUND_MUSIC = 'assets/sounds/adagio_for_strings_tiesto.wav'
 BACKGROUND_MUSIC_VOLUME = .5
 
 ENERGY_SOUND = 'assets/sounds/energy.wav'
-ENERGY_SOUND_VOLUME = .4
+ENERGY_SOUND_VOLUME = .2
 
 
 # BACKGROUND_MUSIC_VOLUME = 0
