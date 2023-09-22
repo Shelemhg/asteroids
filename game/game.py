@@ -47,6 +47,8 @@ from constants import (
     MEDIUM_EXPLOSION_SOUND_VOLUME,
     SMALL_EXPLOSION_SOUND,
     SMALL_EXPLOSION_SOUND_VOLUME,
+    ENERGY_SOUND,
+    ENERGY_SOUND_VOLUME,
     BULLET_RADIUS,
     ENERGY,
     ENERGY_INCREASE
@@ -137,13 +139,14 @@ class AsteroidsGame(arcade.Window):
             
         # SOUND settings
         pygame.mixer.init()
-        pygame.mixer.set_num_channels(6)
+        pygame.mixer.set_num_channels(7)
         self.background_music_channel = pygame.mixer.Channel(0)     # Background music
         self.main_engine_music_channel = pygame.mixer.Channel(1)    # Sound when moving forward
         self.shooting_music_channel = pygame.mixer.Channel(2)    # Sound when activating thrusters
         self.channel3 = pygame.mixer.Channel(3)    # Explosion Big Rocks
         self.channel4 = pygame.mixer.Channel(4)     # Explosion Medium Rocks
         self.channel5 = pygame.mixer.Channel(5)     # Explosion Small Rocks
+        self.channel6 = pygame.mixer.Channel(6)     # Explosion Small Rocks
         # Start playing background music
         self.background_music_channel.play(pygame.mixer.Sound(BACKGROUND_MUSIC))
         self.background_music_channel.set_volume(BACKGROUND_MUSIC_VOLUME)  
@@ -322,10 +325,20 @@ class AsteroidsGame(arcade.Window):
                     if asteroid.size == "Small":
                         asteroid.alive = False
                         
-                        self.energy += self.energy_increase
                         
+                        # Check if there is room in the energy tank for an increase
+                        if self.energy < self.max_energy:
+                            
+                            # Increase the energy
+                            self.energy += self.energy_increase
+                            # Play energy increase sound
+                            self.channel6.play(pygame.mixer.Sound(ENERGY_SOUND))          
+                            self.channel6.set_volume(ENERGY_SOUND_VOLUME)
+                            
+                        # If the energy is greater than the max, put it back to only 100%
                         if self.energy > self.max_energy:
                             self.energy = self.max_energy
+                            
                     else:
                         self.ship.velocity = pygame.Vector2(0, 0)
                         self.ship.alive = False
