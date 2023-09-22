@@ -1,0 +1,5 @@
+# requirements.txt
+
+# Graphics and Game Development
+arcade==2.6.5
+pygame==2.1.1
